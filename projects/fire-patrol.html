@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Fire Patrol</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Introduction</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <header>
+                <h1>Fire Patrol</h1>
+                <p>A fun little game about saving forests from wildfires!</p>
+            </header>
+
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="../images/firepatrol_1.png" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="../images/firepatrol_2.png" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="../images/firepatrol_3.png" style="width:100%">
+                </div>
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+            <script>
+                let slideIndex = 1;
+                showSlides(slideIndex);
+
+                // Next/previous controls
+                function plusSlides(n) {
+                    showSlides(slideIndex += n);
+                }
+
+                // Thumbnail image controls
+                function currentSlide(n) {
+                    showSlides(slideIndex = n);
+                }
+
+                function showSlides(n) {
+                    let i;
+                    let slides = document.getElementsByClassName("mySlides");
+                    let dots = document.getElementsByClassName("dot");
+                    if (n > slides.length) { slideIndex = 1 }
+                    if (n < 1) { slideIndex = slides.length }
+                    for (i = 0; i < slides.length; i++) {
+                        slides[i].style.display = "none";
+                    }
+                    for (i = 0; i < dots.length; i++) {
+                        dots[i].className = dots[i].className.replace(" active", "");
+                    }
+                    slides[slideIndex - 1].style.display = "block";
+                    dots[slideIndex - 1].className += " active";
+                }
+            </script>
+            <br>
+
+            <p>I was part of a 2 week game jam run by PirateSoftware in early 2024. The theme was "it's
+                spreading" and so my team decided to make a casual game that centered around putting out wildfires
+                with a firefighting helicopter. In this project, I was the lead game programmer and I alsodesigned
+                many of the visual and audio effects.</p>
+            <p>You can play the game by downloading it from our <a
+                    href="https://hb-griever.itch.io/fire-patrol">itch.io</a> page.</p>
+        </div>
+    </article>
+    
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
