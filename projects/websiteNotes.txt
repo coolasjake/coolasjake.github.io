@@ -1,0 +1,21 @@
+Time saving strategies:
+
+Professional Looking Blockouts:
+Problem:
+My levels take too long to make, and the textures look stretched and ugly.
+
+Solution:
+Make a single flexible material that will fit nicely on any object, then take time to make it look good.
+
+Step 1 - Self-Aligning Material.
+Having a simple position and scale independant material is easy, and is often used for level elements like water and terrain. To do this, we just use the world-space position (usually swizzled so that we use the horizontal parts) as the UV coordinates.
+This works pretty well, but only in one dimension - so vertical objects will have a smeared slice of the texture up each side.
+The solution to this turns out to be very complicated, but the basic technique is to use the normal direction of the vertex to decide which part of the position to plug into the UV sampler.
+Unitys shadergraph has a node for this called the 'triplanar node'. It takes a texture, and samples it three times to get the x, y and z aligned versions, then it blends between these based on the normal given to it.
+This works well for most situations, and can also be used for the normal-map data, so I would recommend using it over trying to code a custom solution.
+
+Step 1a - Custom Triplanar Mapping.
+My custom solution for triplanar mapping has three goals:
+- Help me understa
+- Try to improve efficiency.
+- Allow different surfaces to have different textures.
