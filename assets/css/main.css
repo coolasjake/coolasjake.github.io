@@ -2663,3 +2663,16 @@ body>article {
 		opacity: 1
 	}
 }
+
+.toc-list, .toc-list ol {
+    list-style-type: none;
+    font-size: 18px;
+  }
+  
+  .toc-list {
+    padding: 0;
+  }
+  
+  .toc-list ol {
+    padding-inline-start: 2ch;
+  }
