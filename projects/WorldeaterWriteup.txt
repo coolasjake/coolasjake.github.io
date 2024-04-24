@@ -1,0 +1,25 @@
+What I learnt from my Ludum Dare submission "Welcoming the World Eater"
+
+The centerpiece of this game is the summoning circle, which I wanted to light up underneath the players finger (or mouse) as they were drawing it.
+Unfortunately fill effects are not supported on sprites like they are on UI images, so I had to make some custom shaders to achieve this effect.
+
+How to make a radial fill shader:
+The method for achieving this fill effect is setting the opacity (alpha) to zero. Working backwards, as long as we have a value that is different in the places we want the image to be cropped, we can use a rounding node like 'step' or 'floor' to get a binary 0/1 value, and then multiply the image alpha by it.
+For the radial fill effect, our value needs to get bigger as we go around around the circle.
+To do this we will use the ArcTangent2 function - which takes a 2D co-ordinate and returns its angle around a circle - and feed in the UV coordinates of the sprite.
+This will give us a radial gradient, but it will be centered around the bottom left of the sprite (0, 0) instead of the middle, and it will have a range of 0 to Pi instead of 0 to 1.
+To fix these we can use the Tiling and Offset node to offset the co-ordinates to the center,
+and the remap node to change the range of the new values from 0-Pi to 0-1.
+Now we can actually change how filled the image is by adding to the value just before the rounding function. For maximum usability, we can make this property a slider float with a range of 0 to 1.
+Finally, we need to use the actual sprite for the color, and factor in the original alpha of the image. At this point we can also alow our material to work with the built in color property of sprites by making a property called _Color, and multiplying our texture values by it before we use them.
+
+Extra features:
+Customizable starting angle:
+Add a 'StartAngle' float (again as a 0-1 slider), then use it as the angle in a 'rotate' node with a center of (0.5, 0.5). I prefer the default to be the top of the circle like a clock, so I also added 180 to the value first.
+Clockwise toggle:
+Making the fill go anticlockwise instead of clockwise can be done by negating the x-component of the uv just before it goes into the arctan2 node. This will not effect the start angle however, so we'll also have to negate that.
+To make things as easy as possible I made a custom function that converts a bool variable into either 1 or -1 so that we can just multiply our values by it directly to negate them.
+
+Bloom fill:
+To make the material fill from the center out instead of around the circle, we can use a distance function to generate our gradient instead of arctan. Then we need to decide if a fill value of 1 should fill the whole sprite, or just fill a circle that touches the edges of the sprite.
+Since the use-cases in my game are all circles, I'll make it touch the edges, but for an effect that works better with square images you should multiply the value by sqrt(2).
