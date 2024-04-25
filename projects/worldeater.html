@@ -115,9 +115,11 @@
             </div>
             <p>The main problems I had to solve while setting this game up were making the shaders for the circle, making the code 
                 to draw the circle based on the players mouse/finger, and then adapting that code to also allow minons to
-                draw the circle.
+                draw the circle. The shaders seem the most likely to be useful for other projects, so I've written out a quick tutorial for them:
             </p>
             
+            <br>
+            <br>
             <h2 id="radial-tutorial">Making the Summoning-Circle Shader</h2>
             <p>The centerpiece of this game is the summoning circle, which I wanted to light up underneath the players finger (or mouse) as they were drawing it.
                 Unfortunately fill effects are not supported on sprites like they are on UI images, so I had to make some custom shaders to achieve this effect.
@@ -125,6 +127,8 @@
             
             <img src="../images/DrawingSummoningCircle.gif" style="width:30%">
                 
+            <br>
+            <br>
             <h6>How to make a radial fill shader:</h6>
             <p>
                 The main way the shape of any image is changed is by setting the opacity (alpha) to zero where you don't want the image to be seen. Working backwards, 
@@ -151,31 +155,36 @@
             </p>
             <img src="../images/Worldeater_Tutorial_4.png" style="width:50%">
             
+            <br>
+            <br>
+            <br>
             <h3>Extra features</h3>
+            <br>
             <h6>Customizable starting angle:</h6>
             <p>
                 Add a 'StartAngle' float (again as a 0-1 slider), then use it as the angle in a 'rotate' node with a center of (0.5, 0.5). I prefer the default to be 
                 the top of the circle like a clock, so I also added 180 to the value first.
             </p>
             <img src="../images/Worldeater_Tutorial_5.png" style="width:50%">
+            <br>
             <h6>Clockwise toggle:</h6>
             <p>Making the fill go anticlockwise instead of clockwise can be done by negating the x-component of the uv just before it goes into the arctan2 node. 
                 This will not effect the start angle however, so we'll also have to negate that. To make things as easy as possible I made a custom function that 
                 converts a bool variable into either 1 or -1 so that we can just multiply our values by it directly to negate them.
             </p>
+            <img src="../images/Worldeater_Tutorial_6.png" style="width:50%">
+            <br>
             <h6>Bloom fill:</h6>
             <p>
                 To make the material fill from the center out instead of around the circle, we can use a distance function to generate our gradient instead of arctan. Then we need to decide if a fill value of 1 should fill the whole sprite, or just fill a circle that touches the edges of the sprite.
                 Since the use-cases in my game are all circles, I'll make it touch the edges, but for an effect that works better with square images you should multiply the value by sqrt(2).
             </p>
-
-					
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/D8Mur4Xv9_Q?si=hPixddrF5FCtaeck" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-			
-			<!-- Link to demo:
-            <p>You can play fire patrol by downloading it from our <a
-                    href="https://hb-griever.itch.io/fire-patrol">itch.io</a> page.</p>
-			-->
+            <img src="../images/Worldeater_Tutorial_7.png" style="width:50%">
+            <br>
+            <br>
+            <br>
+            <h3>Full Radial-Fill Shadergraph:</h3>
+            <img src="../images/Worldeater_Tutorial_Full_Shadergraph.png" style="width:95%">
         </div>
     </article>
     
