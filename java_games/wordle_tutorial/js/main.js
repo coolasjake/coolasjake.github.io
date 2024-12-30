@@ -216,8 +216,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (gameFinished)
             return;
 
+        const firstLetterId = guessedWordCount * 5 + 1;
+        if (nextSpace <= firstLetterId)
+            return;
         const currentWordArr = getCurrentWordArray();
-        const removedLetter = currentWordArr.pop();
+        currentWordArr.pop();
 
         guessedWords[guessedWords.length - 1] = currentWordArr;
         const deletedLetterEl = document.getElementById(String(nextSpace - 1));
