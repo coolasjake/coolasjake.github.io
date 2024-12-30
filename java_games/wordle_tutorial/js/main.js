@@ -246,6 +246,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    
+    document.addEventListener('keydown', function(e) {
+        if (gameFinished) {
+            return;
+        }
+        let key = e.key;
+        console.log(key);
+        if (key === "Enter")
+            handleSubmitWord();
+        if (key === "Backspace" || key === "Delete")
+            handleDeleteLetter();
+
+        const code = key.charCodeAt(0) - 97
+        if (code < 0 || code > 26)
+            return;
+        updateGuessedWords(key);
+    });
+
     //Loop through each key, and give each an 'on click' event.
     for (let i = 0; i < keys.length; i++) {
         keys[i].onclick = ({ target }) => {
