@@ -221,7 +221,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (letter === 'enter' || letter === 'del' || keyboardCorrectness[letterIndex(letter)] === "None") {
                 continue;
             }
-            const tileColour = getTileColour(keyboardCorrectness[letterIndex(letter)]);
+
+            let keyCorrectness = keyboardCorrectness[letterIndex(letter)];
+            if (showCorrect === false && keyCorrectness === "RightPlace") {
+                keyCorrectness = "WrongPlace";
+            }
+            const tileColour = getTileColour(keyCorrectness);
+
             keys[i].style = `background-color:${tileColour};border-color:${tileColour}`;
         }
     }
