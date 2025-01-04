@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let numGuesses = 3;
     let mustBeWord = false;
     let randomWord = true;
-    let showCorrect = true;
+    let showCorrect = false;
     let printShapeDistributions = false;
 
     if (pageName === "shapel2.html") {
-        showCorrect = false;
+        //showCorrect = false;
     }
 
     chooseWord()
@@ -187,7 +187,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return "rgb(255, 209, 102)";
         }
 
-        return "rgb(129, 131, 132);"
+        if (correctness == "Fail") {
+            return "rgb(255, 59, 83)";
+        }
+
+        return "rgb(129, 131, 132);";
     }
 
     function updateCorrectness(currentCorrectness, newCorrectness) {
@@ -226,9 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (showCorrect === false && keyCorrectness === "RightPlace") {
                 keyCorrectness = "WrongPlace";
             }
-            const tileColour = getTileColour(keyCorrectness);
 
-            keys[i].style = `background-color:${tileColour};border-color:${tileColour}`;
+            keys[i].setAttribute("id", keyCorrectness);
         }
     }
 
@@ -265,11 +268,9 @@ document.addEventListener("DOMContentLoaded", () => {
         //Animate each letter to change into green, yellow or grey based on the correct word.
         const interval = 200;
         currentWordArr.forEach((letter, index) => {
+            const letterId = firstLetterId + index;
+            const letterEl = document.getElementById(letterId);
             setTimeout(() => {
-                //Get the colour of this tile.
-
-                const letterId = firstLetterId + index;
-                const letterEl = document.getElementById(letterId);
                 letterEl.classList.add("animate__flipInX");
                 let correctness = correctnessArr[index];
                 if (correctness !== "NotInWord") {
@@ -292,8 +293,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         //Display a message if all guesses have been used.
-        if (guessedWords.length === 6) {
-            gameFinished = true;
+        if (guessedWords.length === numGuesses) {
+            let wordArr = word.split("");
+            setTimeout(() => {
+                for (let index = 1; index <= numGuesses * numLetters; index++) {
+                    const letterEl = document.getElementById(index);
+                    letterEl.classList.remove("animate__headShake");
+                    letterEl.classList.remove("animate__flipInX");
+                    letterEl.classList.add("animate__headShake");
+                }
+                //Flip the first row to the correct answer.
+                setTimeout(() => {
+                    wordArr.forEach((letter, index) => {
+                        const letterId = index + 1;
+                        const letterEl = document.getElementById(letterId);
+                        letterEl.classList.remove("animate__headShake");
+                        letterEl.classList.remove("animate__flipInX");
+                        setTimeout(() => {
+                            letterEl.classList.add("animate__flipInX");
+                            letterEl.textContent = letter;
+                            
+                            const tileColour = getTileColour("Fail");
+                            letterEl.style = `background-color:${tileColour};`;
+            
+                        }, interval * index + 10)
+                    });
+                }, 1500)
+            }, 1500)
         }
 
         //Add the new guess to the guessed words list.

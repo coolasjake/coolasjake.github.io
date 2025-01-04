@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="container">
-        <div id="game">
+        <div id="phone-game">
             <header>
                 <h1 class="title">shapel</h1>
             </header>
@@ -23,7 +23,7 @@
                 <div id="board"></div>
             </div>
 
-            <div id="keyboard-container">
+            <div id="keyboard-container" class="phone">
                 <div class="keyboard-row">
                     <button data-key="a">a</button>
                     <button data-key="c">c</button>
@@ -32,6 +32,8 @@
                     <button data-key="m">m</button>
                     <button data-key="n">n</button>
                     <button data-key="o">o</button>
+                </div>
+                <div class="keyboard-row">
                     <button data-key="r">r</button>
                     <button data-key="s">s</button>
                     <button data-key="u">u</button>
@@ -41,7 +43,6 @@
                     <button data-key="z">z</button>
                 </div>
                 <div class="keyboard-row">
-                    <button data-key="del" class="wide-button">Del</button>
                     <button data-key="b">b</button>
                     <button data-key="d">d</button>
                     <button data-key="f">f</button>
@@ -49,12 +50,15 @@
                     <button data-key="k">k</button>
                     <button data-key="l">l</button>
                     <button data-key="t">t</button>
+                </div>
+                <div class="keyboard-row">
+                    <button data-key="del" class="delete-button"></button>
                     <button data-key="g">g</button>
                     <button data-key="j">j</button>
                     <button data-key="p">p</button>
                     <button data-key="q">q</button>
                     <button data-key="y">y</button>
-                    <button data-key="enter" class="wide-button">Enter</button>
+                    <button data-key="enter" class="submit-button"></button>
                 </div>
             </div>
         </div>
