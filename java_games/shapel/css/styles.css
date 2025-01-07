@@ -25,6 +25,11 @@
     src: url(pompiere.regular.ttf);
 }
 
+@font-face {
+    font-family: shapel;
+    src: url(Shapel1Longer-Regular.ttf);
+}
+
 html, body {
     height: 100%;
     font-family: "Lucida Sans", "Lucida Sans Regular", 'Lucida Grande', 
@@ -34,33 +39,32 @@ html, body {
 
 #container {
     display: flex;
-    height: 100%;
+    height: 100vh;
 }
 
 #game {
     width: 100%;
-    max-width: 600px;
-    height: 100%;
+    max-width: 45vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 #phone-game {
     width: 100%;
-    max-width: 400px;
+    max-width: 45vh;
     height: 100%;
-    display: flex;
     flex-direction: column;
 }
 
 header {
+    margin-top: 3vh;
     border-bottom: 1px solid rgb(58, 58, 60);
 }
 
 .title {
     color: rgb(24, 40, 37);
     font-size: 4rem;
-    margin: 0.4rem 0 0.4rem 0;
     text-align: center;
     font-family: "Lucida Sans", "Lucida Sans Regular", 'Lucida Grande', 
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -68,30 +72,32 @@ header {
 
 #board-container {
     display: flex;
-    height: 30%;
+    height: 30vh;
     justify-content: center;
     align-items: center;
-    flex-grow: 0.5;
     overflow: hidden;
+    padding-top: 8vh;
+    padding-bottom: 10vh;
 }
 
 #board {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-gap: 5px;
-    padding: 10px;
+    grid-row-gap: 2vh;
+    grid-column-gap: 0.5vh;
     box-sizing: border-box;
 }
 
 .square, .high, .low {
-    width: 40px;
-    height: 40px;
-    font-size: 50px;
+    width: 4vh;
+    height: 4vh;
+    font-size: 7vh;
     color: rgb(24, 40, 37);
     border: 2px solid rgb(58, 58, 60);
+    border-radius: 4px;
     text-transform: lowercase;
-    font-family: pompiere;
-    line-height: 35px;
+    font-family: shapel;
+    line-height: 4.5vh;
 
     display: flex;
     justify-content: center;
@@ -100,24 +106,24 @@ header {
 
 .square {
     background-color: rgb(15, 230, 222);
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 4vh;
+    margin-bottom: 4vh;
 }
 
 .high {
     background-color: rgb(243, 23, 209);
-    margin-bottom: 40px;
-    padding-top: 40px;
+    padding-top: 4vh;
+    margin-bottom: 4vh;
 }
 
 .low {
     background-color: rgb(147, 105, 213);
-    margin-top: 40px;
-    padding-bottom: 40px;
+    margin-top: 4vh;
+    padding-bottom: 4vh;
 }
 
 #keyboard-container {
-    height: 30%;
+    height: 20vh;
     position: relative;
 }
 
@@ -125,19 +131,19 @@ header {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin: 0 auto 8px;
+    margin: 0 auto 0.8vh;
     touch-action: manipulation;
 }
 
 .keyboard-row button {
-    font-family: pompiere;
-    font-size: 45px;
+    font-family: shapel;
+    font-size: 4.5vh;
     font-weight: 200;
     border: 2px solid rgb(58, 58, 60);
     cursor: pointer;
-    flex-grow: 1;
     text-transform: lowercase;
-    margin-right: 6px;
+    margin-left: 0.3vh;
+    margin-right: 0.3vh;
     border-radius: 4px;
     user-select: none;
 }
@@ -145,41 +151,44 @@ header {
 .small-button {
     background-color: rgb(15, 230, 222);
     color: rgb(24, 40, 37);
-    height: 45px;
-    line-height: 0px;
-    flex-grow: 1;
+    height: 5vh;
+    width: 5vh;
+    line-height: 0;
 }
 
 .high-button {
     background-color: rgb(243, 23, 209);
     color: rgb(24, 40, 37);
-    height: 70px;
+    height: 8vh;
+    width: 5vh;
+    padding-top: 1vh;
 }
 
 .low-button {
     background-color: rgb(147, 105, 213);
     color: rgb(24, 40, 37);
-    height: 70px;
+    height: 8vh;
+    width: 5vh;
+    padding-bottom: 1vh;
+    line-height: 4vh;
 }
 
+.keyboard-row button.delete-button, .keyboard-row button.submit-button {
+    margin-top: 0;
+    height: 8vh;
+    width: 5vh;
+    background-size: 5vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
 .keyboard-row button.delete-button {
-    margin-top: 0px;
-    width: 70px;
-    height: 70px;
     background-image: url(images/Delete.png);
-    background-size: 66px; /* Size - border width * 2 (=4). */
-    background-repeat:initial;
-    flex-grow: 0;
+    background-color: rgb(255, 59, 83);
 }
 
 .keyboard-row button.submit-button {
-    margin-top: 0px;
-    width: 70px;
-    height: 70px;
     background-image: url(images/Submit.png);
-    background-size: 66px; /* Size - border width * 2 (=4). */
-    background-repeat:initial;
-    flex-grow: 0;
+    background-color: rgb(0, 245, 0);
 }
 
 #WrongPlace {
@@ -196,11 +205,17 @@ header {
     border: rgb(190, 230, 150);
 }
 
+#word-stats {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    font-size: 2vh;
+}
+
 .spacer-half {
     flex-grow: 0;
-    border: 2px solid rgb(58, 58, 60);
+    border: 0.2vh solid rgb(58, 58, 60);
     background-color: rgb(58, 58, 60);
-    margin-right: 6px;
+    margin-right: 0.6vh;
 }
 
 /*
