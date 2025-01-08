@@ -1,6 +1,4 @@
-
-
-export const words = `abroad
+abroad
 absent
 accent
 accept
@@ -1430,6 +1428,4 @@ yields
 zambia
 zoloft
 zoning
-zshops`
-
-export const wordsList = words.split("\n");
+zshops

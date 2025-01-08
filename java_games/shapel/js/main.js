@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let numGames = 0;
     let numWins = 0;
     let points = 0;
-    let cookiesList = [];
+    let matchingWords = [];
     loadData();
 
     chooseWord()
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         
-        let matchingWords = "";
+        matchingWords = "";
         for (let match of codeDict[wordShape]) {
             matchingWords += match + ", ";
         }
@@ -443,6 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                         if (action === 'words') {
                             //Show possible words for this shape.
+                            alert(matchingWords);
                             return;
                         }
                     }
