@@ -14,52 +14,42 @@
     <div id="container">
         <div id="game">
             <header>
-                <div id="square">s</div>
-                <div id="square">h</div>
-                <div id="square">a</div>
-                <div id="square">p</div>
-                <div id="square">e</div>
-                <div id="square">l</div>
+                <div class="keyboard-row">
+                    <div class="small">s</div>
+                    <div class="high">h</div>
+                    <div class="small">a</div>
+                    <div class="low">p</div>
+                    <div class="small">e</div>
+                    <div class="high">l</div>
+                </div>
             </header>
             <div id="word-stats">There are x words with this shape.</div>
 
             <div id="board-container">
                 <div id="board"></div>
             </div>
-            
-            <div id="keyboard-container">
-                <div class="keyboard-row">
-                    <button data-key="a">a</button>
-                    <button data-key="c">c</button>
-                    <button data-key="e">e</button>
-                    <button data-key="i">i</button>
-                    <button data-key="m">m</button>
-                    <button data-key="n">n</button>
-                    <button data-key="o">o</button>
-                    <button data-key="r">r</button>
-                    <button data-key="s">s</button>
-                    <button data-key="u">u</button>
-                    <button data-key="v">v</button>
-                    <button data-key="w">w</button>
-                    <button data-key="x">x</button>
-                    <button data-key="z">z</button>
-                </div>
-                <div class="keyboard-row">
-                    <button data-key="del" class="delete-button"></button>
-                    <button data-key="b">b</button>
-                    <button data-key="d">d</button>
-                    <button data-key="f">f</button>
-                    <button data-key="h">h</button>
-                    <button data-key="k">k</button>
-                    <button data-key="l">l</button>
-                    <button data-key="t">t</button>
-                    <button data-key="g">g</button>
-                    <button data-key="j">j</button>
-                    <button data-key="p">p</button>
-                    <button data-key="q">q</button>
-                    <button data-key="y">y</button>
-                    <button data-key="enter" class="submit-button"></button>
-                </div>
+
+            <div id="replaceable-section">
+                <span id="results">
+                    <div id="results-grid">
+                        <div class="small">s</div>
+                        <div class="high">h</div>
+                        <div class="small">a</div>
+                        <div class="low">p</div>
+                        <div class="small">e</div>
+                        <div class="high">l</div>
+                    </div>
+                </span>
+                <span id="stats">
+                    <div>Score:</div>
+                    <div>Average score:</div>
+                    <div>Games played:</div>
+                    <div>Games won:</div>
+                </span>
+                <span id="controls">
+                    <button class="post-game" data-key="new">New Shape</button>
+                    <button class="post-game" data-key="words">See Words</button>
+                </span>
             </div>
         </div>
     </div>

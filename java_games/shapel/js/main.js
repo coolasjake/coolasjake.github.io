@@ -16,14 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let showCorrect = false;
     let printShapeDistributions = false;
 
-    if (pageName === "shapel2.html") {
-        //showCorrect = false;
-    }
+    let totalScore = 0;
+    let numGames = 0;
+    let numWins = 0;
+    let points = 0;
+    let cookiesList = [];
+    loadData();
 
     chooseWord()
 
-    //Call the create squares function.
-    createSquares()
+    createLetterSlots()
 
     let guessedWords = [[]]
     let keyboardCorrectness = []
@@ -45,9 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
             word = wordsList[randIndex];
         }
         wordShape = wordCode(word);
-        console.log(word);
+        //console.log(word);
         const message = `There are ${codeDict[wordShape].length} words with this shape.`
-        console.log(message)
+        //console.log(message)
         const wordStats = document.getElementById("word-stats");
         wordStats.textContent = message;
 
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let match of codeDict[wordShape]) {
             matchingWords += match + ", ";
         }
-        console.log(matchingWords);
+        //console.log(matchingWords);
     }
 
     function setupLetters()
@@ -91,10 +93,27 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+    
+    function loadData() {
+        totalScore = loadValue("totalScore");
+        numGames = loadValue("numGames");
+        numWins = loadValue("numWins");
+    }
+    
+    function updateValue(name, change) {
+        let newValue = parseInt(localStorage.getItem(name)) + change;
+        localStorage.setItem(name, newValue);
+        return newValue;
+    }
 
-    function printPossibleWords()
-    {
-
+    function loadValue(name) {
+        if (localStorage.getItem(name) === null) {
+            localStorage.setItem(name, 0);
+            return 0;
+        }
+        else {
+            return parseInt(localStorage.getItem(name));
+        }
     }
 
     function letterIndex(letter) {
@@ -121,8 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentLetter = word.charAt((nextSpace - 1) % numLetters);
         const currentShape = letterShape(currentLetter);
         const addedShape = letterShape(letter);
-
-        console.log(`${currentShape}, ${addedShape}`);
 
         if (currentShape !== addedShape) {
             return;
@@ -264,6 +281,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //Get the correctness of the guess.
         const correctnessArr = getWordCorrectness(currentWordArr);
+        updateKeyboard(currentWord, correctnessArr);
+
+        if (currentWord === word) {
+            //Display a message if the word is correct.
+            gameFinished = true;
+            points = 4 - guessedWordCount;
+            correctAnimation(points);
+            updateScore(points);
+        }
+        else if (guessedWords.length === numGuesses) {
+            //Display the correct word if all guesses have been used.
+            clueAnimation(currentWordArr, correctnessArr);
+            failAnimation();
+            if (allLettersFound()) {
+                points = 1;
+                updateScore(points);
+            }
+            else {
+                points = 0;
+                updateScore(points);
+            }
+        }
+        else {
+            clueAnimation(currentWordArr, correctnessArr);
+        }
+
+        //Increment the number of guesses used.
+        guessedWordCount += 1;
+
+        //Add the new guess to the guessed words list.
+        guessedWords.push([])
+    }
+
+    function allLettersFound() {
+        for (let i = 0; i < word.length; i++) {
+            let letterCorrectness = keyboardCorrectness[word.charCodeAt(i) - 97];
+            if (letterCorrectness != "RightPlace" && letterCorrectness != "WrongPlace") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function updateScore(points) {
+        if (points > 1) {
+            numWins = updateValue("numWins", 1);
+        }
+        numGames = updateValue("numGames", 1);
+        totalScore = updateValue("totalScore", points);
+    }
+
+    function correctAnimation(score) {
+        const firstLetterId = guessedWordCount * numLetters + 1;
+
+        //Animate each letter to change into green, yellow or grey based on the correct word.
+        const interval = 200;
+        let wordArr = word.split("");
+        wordArr.forEach((letter, index) => {
+            const letterId = firstLetterId + index;
+            const letterEl = document.getElementById(letterId);
+            setTimeout(() => {
+                letterEl.classList.add("animate__flipInX");
+                const tileColour = getTileColour("RightPlace");
+                letterEl.style = `background-color:${tileColour};`;
+
+            }, interval * index)
+        });
+
+        let endMessage = "hurray";
+        if (score === 4) {
+            endMessage = "superb";
+        }
+        else if (score === 3) {
+            endMessage = "huzzah"
+        }
+        else if (score === 2) {
+            endMessage = "crikey";
+        }
+        gameEndAnimation(endMessage);
+    }
+
+    function clueAnimation(currentWordArr, correctnessArr) {
+        const firstLetterId = guessedWordCount * numLetters + 1;
 
         //Animate each letter to change into green, yellow or grey based on the correct word.
         const interval = 200;
@@ -274,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 letterEl.classList.add("animate__flipInX");
                 let correctness = correctnessArr[index];
                 if (correctness !== "NotInWord") {
-                    if (showCorrect === false && currentWord !== word && correctness === "RightPlace") {
+                    if (showCorrect === false && correctness === "RightPlace") {
                         correctness = "WrongPlace";
                     }
                     const tileColour = getTileColour(correctness);
@@ -283,49 +383,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }, interval * index)
         });
+    }
 
-        //Increment the number of guesses used.
-        guessedWordCount += 1;
+    function failAnimation() {
+        gameEndAnimation(word);
+    }
 
-        //Display a message if the word is correct.
-        if (currentWord === word) {
-            gameFinished = true;
-        }
-        
-        //Display a message if all guesses have been used.
-        if (guessedWords.length === numGuesses) {
-            let wordArr = word.split("");
+    function gameEndAnimation(displayWord) {
+        setTimeout(() => {
+            let wordArr = displayWord.split("");
+            let shapeArr = wordCode(displayWord);
+            const interval = 200;
+            const section = document.getElementById("replaceable-section");
+            const keyboard = document.getElementById("keyboard-container")
+            keyboard.classList.add("animate__animated");
+            keyboard.classList.add("animate__fadeOut");
             setTimeout(() => {
-                for (let index = 1; index <= numGuesses * numLetters; index++) {
-                    const letterEl = document.getElementById(index);
-                    letterEl.classList.remove("animate__headShake");
-                    letterEl.classList.remove("animate__flipInX");
-                    letterEl.classList.add("animate__headShake");
+                section.innerHTML = "";
+                section.innerHTML = `
+                <span id="results" class="animate__animated animate__fadeIn">
+                    <div id="results-grid">
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                    </div>
+                </span>
+                <span id="stats">
+                    <div>Score: ${points}</div>
+                    <div>Average score: ${Math.round((totalScore / numGames) * 10) / 10}</div>
+                    <div>Games played: ${numGames}</div>
+                    <div>Games won: ${numWins}</div>
+                </span>
+                <span id="controls">
+                    <button class="post-game" data-key="new">New Shape</button>
+                    <button class="post-game" data-key="words">See Words</button>
+                </span>`;
+
+                const resultShapes = section.getElementsByClassName("result-shape");
+                Array.from(resultShapes).forEach((shape, index) => {
+                    setTimeout(() => {
+                        shape.classList.add("animate__animated");
+                        shape.classList.add("animate__bounceInUp");
+                        shape.classList.add(letterShapes[shapeArr[index]]);
+                        shape.textContent = `${wordArr[index]}`
+                    }, 300 + interval * index)
+                });
+
+                const buttons = section.getElementsByClassName("post-game");
+                
+                for (let i = 0; i < buttons.length; i++) {
+                    buttons[i].onclick = ({ target }) => {                    
+                        const action = target.getAttribute("data-key");
+                        if (action === 'new') {
+                            location.reload()
+                            return;
+                        }
+                        if (action === 'words') {
+                            //Show possible words for this shape.
+                            return;
+                        }
+                    }
                 }
-                //Flip the first row to the correct answer.
-                setTimeout(() => {
-                    wordArr.forEach((letter, index) => {
-                        const letterId = index + 1;
-                        const letterEl = document.getElementById(letterId);
-                        letterEl.classList.remove("animate__headShake");
-                        letterEl.classList.remove("animate__flipInX");
-                        setTimeout(() => {
-                            letterEl.classList.add("animate__flipInX");
-                            letterEl.textContent = letter;
-                            
-                            const tileColour = getTileColour("Fail");
-                            letterEl.style = `background-color:${tileColour};`;
-            
-                        }, interval * index + 10)
-                    });
-                }, 1500)
-            }, 1500)
-        }
-
-        //Add the new guess to the guessed words list.
-        guessedWords.push([])
-
-        updateKeyboard(currentWord, correctnessArr);
+            }, 1000)
+        }, 1500)
     }
 
     function handleDeleteLetter() {
@@ -344,30 +467,30 @@ document.addEventListener("DOMContentLoaded", () => {
         nextSpace -= 1;
     }
 
-    function createSquares() {
+    function createLetterSlots() {
         //Get the element with the 'board' id.
         const gameBoard = document.getElementById("board")
 
         for (let j = 0; j < numGuesses; j++) {
             for (let i = 0; i < numLetters; i++) {
                 //Create a div element.
-                let square = document.createElement("div");
+                let letterSlot = document.createElement("div");
                 //Give it the correct class.
                 const shape = letterShape(word.charAt(i));
                 if (shape === "small") {
-                    square.classList.add("square");
+                    letterSlot.classList.add("small");
                 }
                 else if (shape === "high") {
-                    square.classList.add("high");
+                    letterSlot.classList.add("high");
                 }
                 else if (shape === "low") {
-                    square.classList.add("low");
+                    letterSlot.classList.add("low");
                 }
-                square.classList.add("animate__animated");
+                letterSlot.classList.add("animate__animated");
                 //Set the id to index (+1).
-                square.setAttribute("id", j * numLetters + i + 1);
-                //Add the square to the board.
-                gameBoard.appendChild(square);
+                letterSlot.setAttribute("id", j * numLetters + i + 1);
+                //Add the letter to the board.
+                gameBoard.appendChild(letterSlot);
             }
         }
     }
