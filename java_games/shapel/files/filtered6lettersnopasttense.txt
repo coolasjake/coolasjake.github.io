@@ -1,6 +1,4 @@
-
-
-export const words = `search
+search
 online
 people
 health
@@ -877,6 +875,4 @@ canvas
 thesis
 aurora
 chorus
-corpus`
-
-export const wordsList = words.split("\n");
+corpus
