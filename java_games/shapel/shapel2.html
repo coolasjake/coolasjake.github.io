@@ -30,21 +30,21 @@
             </div>
 
             <div id="replaceable-section">
-                <span id="results">
+                <span id="results" class="animate__animated animate__fadeIn">
                     <div id="results-grid">
-                        <div class="small">s</div>
-                        <div class="high">h</div>
-                        <div class="small">a</div>
-                        <div class="low">p</div>
-                        <div class="small">e</div>
-                        <div class="high">l</div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
+                        <div class="result-shape"></div>
                     </div>
                 </span>
                 <span id="stats">
-                    <div>Score:</div>
-                    <div>Average score:</div>
-                    <div>Games played:</div>
-                    <div>Games won:</div>
+                    <div>Score: ${points}</div>
+                    <div>Average score: ${Math.round((totalScore / numGames) * 10) / 10}</div>
+                    <div>Games played: ${numGames}</div>
+                    <div>Games won: ${numWins}</div>
                 </span>
                 <span id="controls">
                     <button class="post-game" data-key="new">New Shape</button>

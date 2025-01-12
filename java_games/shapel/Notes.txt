@@ -1,13 +1,24 @@
 Shapel TODO:
 
+DONE - PC KB
+- Daily word
+DONE - No buttons
+DONE - Smaller logo
+- Information button (rules, score)
+TEMP - Improved word-list
+DONE - Stats => Num games, Game Point Average as %
+
+
+
+
 DONE - Improve scaling for screen sizes.
 DONE - Rounded guess slots.
 DONE - PC keyboard line gone.
 DONE - Keyboard symmetry.
 - Correct use better animations.
-- Incorrect new word appears over keyboard with shape colours.
+DONE - Incorrect new word appears over keyboard with shape colours.
 DONE - New logo.
-- Score system (game point average).
+DONE - Score system (game point average).
 	- 4pts for 1 guess.
 	- 3pts for 2.
 	- 2pts for 3.

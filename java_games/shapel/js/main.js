@@ -4,6 +4,9 @@ import { letterShapeCodes, letterShapes } from "./letter_shapes.js"
 //Add a trigger for when the document has finished loading.
 document.addEventListener("DOMContentLoaded", () => {
     var pageName = (window.location.pathname).split("/").pop();
+
+    //Get a list of keys (buttons within an element with the 'keyboard-row' class)
+    const keys = document.querySelectorAll('.keyboard-row button')
     
     const codeDict = {}
     let word = "shapel";
@@ -21,23 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let numWins = 0;
     let points = 0;
     let matchingWords = [];
-    loadData();
-
-    chooseWord()
-
-    createLetterSlots()
 
     let guessedWords = [[]]
     let keyboardCorrectness = []
     let nextSpace = 1;
     let guessedWordCount = 0;
 
-    //Get a list of keys (buttons within an element with the 'keyboard-row' class)
-    const keys = document.querySelectorAll('.keyboard-row button')
-
     let gameFinished = false;
 
-    setupLetters()
+    setupKeys();
+    setupInfoBox();
+    loadData();
+    chooseWord();
+    createLetterSlots();
+
+    setupLetters();
 
     function chooseWord() {
         analyseWords();
@@ -395,9 +396,12 @@ document.addEventListener("DOMContentLoaded", () => {
             let shapeArr = wordCode(displayWord);
             const interval = 200;
             const section = document.getElementById("replaceable-section");
-            const keyboard = document.getElementById("keyboard-container")
-            keyboard.classList.add("animate__animated");
-            keyboard.classList.add("animate__fadeOut");
+            const keyboards = document.getElementsByClassName("keyboard-container")
+            for (let kb of keyboards) {
+                kb.classList.add("animate__animated");
+                kb.classList.add("animate__fadeOut");
+            }
+            const gamePointAverage = Math.round((totalScore / numGames) * 50)
             setTimeout(() => {
                 section.innerHTML = "";
                 section.innerHTML = `
@@ -412,14 +416,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </span>
                 <span id="stats">
-                    <div>Score: ${points}</div>
-                    <div>Average score: ${Math.round((totalScore / numGames) * 10) / 10}</div>
-                    <div>Games played: ${numGames}</div>
-                    <div>Games won: ${numWins}</div>
-                </span>
-                <span id="controls">
-                    <button class="post-game" data-key="new">New Shape</button>
-                    <button class="post-game" data-key="words">See Words</button>
+                    <div class="game-stats">Games played: ${numGames}</div>
+                    <div class="game-stats">Game Point Average: ${gamePointAverage}%</div>
                 </span>`;
 
                 const resultShapes = section.getElementsByClassName("result-shape");
@@ -496,57 +494,86 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    
-    document.addEventListener('keydown', function(e) {
-        if (gameFinished) {
-            return;
-        }
-        let key = e.key;
-        
-        if (key === "Enter")
-            handleSubmitWord();
-        if (key === "Backspace" || key === "Delete")
-            handleDeleteLetter();
-
-        const code = key.charCodeAt(0) - 97
-        if (code < 0 || code > 26)
-            return;
-        updateGuessedWords(key);
-    });
-
-    //Loop through each key, and give each an 'on click' event.
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i].getAttribute("data-key");
-        const shape = letterShape(key);
-        if (shape === "high") {
-            keys[i].classList.add("high-button");
-        }
-        else if (shape === "low") {
-            keys[i].classList.add("low-button");
-        }
-        else {
-            keys[i].classList.add("small-button");
-        }
-
-        keys[i].onclick = ({ target }) => {
+    function setupKeys() {
+        document.addEventListener('keydown', function(e) {
             if (gameFinished) {
                 return;
             }
+            let key = e.key;
             
-            //Store the key data of the clicked key.
-            const key = target.getAttribute("data-key");
-            
-            if (key === 'enter') {
+            if (key === "Enter")
                 handleSubmitWord();
-                return;
-            }
-
-            if (key === 'del') {
+            if (key === "Backspace" || key === "Delete")
                 handleDeleteLetter();
+    
+            const code = key.charCodeAt(0) - 97
+            if (code < 0 || code > 26)
                 return;
-            }
-
             updateGuessedWords(key);
+        });
+    
+        //Loop through each key, and give each an 'on click' event.
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i].getAttribute("data-key");
+            const shape = letterShape(key);
+            if (shape === "high") {
+                keys[i].classList.add("high-button");
+            }
+            else if (shape === "low") {
+                keys[i].classList.add("low-button");
+            }
+            else {
+                keys[i].classList.add("small-button");
+            }
+    
+            keys[i].onclick = ({ target }) => {
+                if (gameFinished) {
+                    return;
+                }
+                
+                //Store the key data of the clicked key.
+                const key = target.getAttribute("data-key");
+                
+                if (key === 'enter') {
+                    handleSubmitWord();
+                    return;
+                }
+    
+                if (key === 'del') {
+                    handleDeleteLetter();
+                    return;
+                }
+    
+                updateGuessedWords(key);
+            }
+        }
+    }
+
+    function setupInfoBox() {
+        // Get the modal
+        var infoBox = document.getElementById("info-box");
+    
+        // Get the button that opens the modal
+        var btn = document.getElementById("info-button");
+    
+        // Get the <span> element that closes the modal
+        var span = infoBox.getElementsByClassName("close")[0];
+    
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+        infoBox.style.display = "block";
+        }
+    
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+        infoBox.style.display = "none";
+        }
+    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == infoBox) {
+                infoBox.style.display = "none";
+            }
         }
     }
 })

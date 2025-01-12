@@ -1,6 +1,4 @@
-
-
-export const words = `aahing
+aahing
 aaliis
 aarrgh
 ababua
@@ -29873,6 +29871,4 @@ zounds
 zufolo
 zuisin
 zunian
-zurich`
-
-export const wordsList = words.split("\n");
+zurich
