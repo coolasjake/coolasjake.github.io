@@ -1,4 +1,4 @@
-import { wordsList } from "./words.js"
+import { allWordsList, dailyWordsList } from "./words.js"
 import { letterShapeCodes, letterShapes } from "./letter_shapes.js"
 
 //Add a trigger for when the document has finished loading.
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const numLetters = 6;
     let numGuesses = 3;
     let mustBeWord = false;
-    let randomWord = true;
+    let randomWord = false;
     let showCorrect = false;
     let printShapeDistributions = false;
 
@@ -44,17 +44,19 @@ document.addEventListener("DOMContentLoaded", () => {
         analyseWords();
 
         if (randomWord) {
-            const randIndex = Math.floor(Math.random() * wordsList.length);
-            word = wordsList[randIndex];
+            const randIndex = Math.floor(Math.random() * allWordsList.length);
+            word = allWordsList[randIndex];
+        }
+        else {
+            const day = getDay();
+            word = dailyWordsList[day];
         }
         wordShape = wordCode(word);
         //console.log(word);
-        const message = `There are ${codeDict[wordShape].length} words with this shape.`
+        const message = `There are at least ${codeDict[wordShape].length} words with this shape.`
         //console.log(message)
         const wordStats = document.getElementById("word-stats");
         wordStats.textContent = message;
-
-
         
         matchingWords = "";
         for (let match of codeDict[wordShape]) {
@@ -80,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function analyseWords()
     {
-        for (const word of wordsList) {
+        for (const word of allWordsList) {
             let code = wordCode(word);
             if (codeDict[code] === undefined) {
                 codeDict[code] = [];
@@ -90,9 +92,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (printShapeDistributions) {
             for (const key of Object.keys(codeDict)) {
-                console.log(`${key}= ${codeDict[key]}`);
+                //console.log(`${key}= ${codeDict[key].length} ${codeDict[key]}`);
+                console.log(`${codeDict[key].length}: ${codeDict[key]}`);
             }
         }
+    }
+
+    function getDay() {
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+        var oneDay = 1000 * 60 * 60 * 24;
+        var day = Math.floor(diff / oneDay);
+        return day;
     }
     
     function loadData() {
@@ -264,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstLetterId = guessedWordCount * numLetters + 1;
 
         //Cancel if the word is less than the num letters.
-        if (currentWordArr.length !== numLetters || (!wordsList.includes(currentWord) && mustBeWord)) {
+        if (currentWordArr.length !== numLetters || (!allWordsList.includes(currentWord) && mustBeWord)) {
             for (let index = 0; index < numLetters; index++) {
                 const letterId = firstLetterId + index;
                 const letterEl = document.getElementById(letterId);
@@ -358,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
             endMessage = "huzzah"
         }
         else if (score === 2) {
-            endMessage = "crikey";
+            endMessage = "hooray";
         }
         gameEndAnimation(endMessage);
     }

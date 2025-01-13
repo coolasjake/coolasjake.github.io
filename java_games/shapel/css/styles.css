@@ -66,13 +66,13 @@ header {
 
 /* If the width is greater than the height (i.e. landscape). */
 @media (min-width:100vh) {
-    #board-container {height: 60vh}
+    #board-container {height: 55vh}
     #board {grid-row-gap: 3vh;}
 }
 
 #results {
     display: flex;
-    height: 15vh;
+    height: 17vh;
     justify-content: top;
     align-items: top;
     overflow: hidden;
@@ -142,23 +142,23 @@ header {
 /* If the width is greater than the height (i.e. landscape). */
 @media (min-width:100vh) {
     .small, .high, .low {
-        font-size: 9vh;
-        line-height: 6vh;
-        width: 5.5vh;
-        height: 5.5vh;
+        font-size: 8vh;
+        line-height: 5.5vh;
+        width: 5vh;
+        height: 5vh;
     }
 
     .small {
-        margin-top: 5.5vh;
-        margin-bottom: 5.5vh;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
     }
     .high {
-        padding-top: 5.5vh;
-        margin-bottom: 5.5vh;
+        padding-top: 5vh;
+        margin-bottom: 5vh;
     }
     .low {
-        margin-top: 5.5vh;
-        padding-bottom: 5.5vh;
+        margin-top: 5vh;
+        padding-bottom: 5vh;
     }
 }
 
@@ -250,18 +250,18 @@ header {
     margin-top: 0;
     height: 8vh;
     width: 5vh;
-    background-size: 5vh;
+    background-size: 4vh;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .keyboard-row button.delete-button {
-    background-image: url(images/Delete.png);
+    background-image: url(images/NewDelete.png);
     background-color: rgb(255, 59, 83);
 }
 
 .keyboard-row button.submit-button {
-    background-image: url(images/Submit.png);
+    background-image: url(images/NewSubmit.png);
     background-color: rgb(0, 245, 0);
 }
 
@@ -310,7 +310,7 @@ button.post-game {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 10vh; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -321,12 +321,40 @@ button.post-game {
 }
 
 .info-box-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
+    text-align: center;
+    background-color: rgb(243, 218, 216);
+    border-radius: 4px;
+    max-width: min(80vh, 80vw);
+    margin: auto; /* 5vh; */
+    padding: 3vh;
     border: 1px solid #888;
-    width: 80%;
+    /* width: 80%; */
 }
+
+.info-box-content ul, .info-box-content li {
+    list-style-position: outside;
+    text-align: left;
+    margin-top: min(2vh, 4vw);
+    margin-bottom: min(1vh, 2vw);
+    margin-left: min(1vh, 2vw);
+}
+
+.info-box-content h3, .info-box-content p {
+    margin-bottom: min(2vh, 4vw);
+}
+
+.info-box-content li {
+    font-size: min(2vh, 4vw);
+}
+
+.info-box-content h3 {
+    font-size: min(3vh, 6vw);
+}
+
+.info-box-content p {
+    font-size: min(2.5vh, 5vw);
+}
+
 
 /* The Close Button */
 .close {

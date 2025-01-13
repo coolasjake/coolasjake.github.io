@@ -1,12 +1,13 @@
 Shapel TODO:
 
 DONE - PC KB
-- Daily word
+DONE - Daily word
 DONE - No buttons
 DONE - Smaller logo
-- Information button (rules, score)
-TEMP - Improved word-list
+DONE - Information button (rules, score)
+DONE - Improved word-list
 DONE - Stats => Num games, Game Point Average as %
+DONE - New delete/enter buttons
 
 
 
