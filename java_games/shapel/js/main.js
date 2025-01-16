@@ -25,20 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let points = 0;
     let matchingWords = [];
 
-    let guessedWords = [[]]
+    let guessedLetters = [[]]
     let keyboardCorrectness = []
     let nextSpace = 1;
     let guessedWordCount = 0;
 
     let gameFinished = false;
+    let loading = true;
 
     setupKeys();
     setupInfoBox();
-    loadData();
     chooseWord();
     createLetterSlots();
 
     setupLetters();
+    loadData();
 
     function chooseWord() {
         analyseWords();
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         wordShape = wordCode(word);
         //console.log(word);
-        const message = `There are at least ${codeDict[wordShape].length} words with this shape.`
+        const message = `There are at least ${codeDict[wordShape].length} words with this shape.`;
         //console.log(message)
         const wordStats = document.getElementById("word-stats");
         wordStats.textContent = message;
@@ -111,6 +112,25 @@ document.addEventListener("DOMContentLoaded", () => {
         totalScore = loadValue("totalScore");
         numGames = loadValue("numGames");
         numWins = loadValue("numWins");
+        let prevGuessesString = loadString("prevGuesses");
+        if (prevGuessesString !== 0) {
+            console.log(prevGuessesString);
+            let prevGuesses = prevGuessesString.split(",");
+            for (let i = 0; i < prevGuesses.length; i++) {
+                let prevGuess = prevGuesses[i].split('');
+                for (let j = 0; j < prevGuess.length; j++) {
+                    updateGuessedWords(prevGuess[j]);
+                }
+                handleSubmitWord();
+            }
+        }
+        loading = false;
+    }
+    
+    function setValue(name, value) {
+        let newValue = parseInt(value);
+        localStorage.setItem(name, newValue);
+        return newValue;
     }
     
     function updateValue(name, change) {
@@ -128,6 +148,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return parseInt(localStorage.getItem(name));
         }
     }
+    
+    function setString(name, value) {
+        localStorage.setItem(name, value);
+        return value;
+    }
+
+    function loadString(name) {
+        if (localStorage.getItem(name) === null) {
+            localStorage.setItem(name, 0);
+            return 0;
+        }
+        else {
+            return localStorage.getItem(name);
+        }
+    }
 
     function letterIndex(letter) {
         return (letter.charCodeAt(0) - 97);
@@ -143,8 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Get the array of the current word (e.g. array of letters)
     function getCurrentWordArray() {
-        const numberOfGuessedWords = guessedWords.length;
-        return guessedWords[numberOfGuessedWords - 1]
+        const numberOfGuessedWords = guessedLetters.length;
+        return guessedLetters[numberOfGuessedWords - 1]
     }
 
     function updateGuessedWords(letter) {
@@ -295,25 +330,40 @@ document.addEventListener("DOMContentLoaded", () => {
         //Get the correctness of the guess.
         const correctnessArr = getWordCorrectness(currentWordArr);
         updateKeyboard(currentWord, correctnessArr);
+        
+        console.log(guessedLetters);
+
+        let saveData = [];
+        //Save the word in local data.
+        for (let i = 0; i < guessedLetters.length; i++) {
+            saveData.push(guessedLetters[i].join(''));
+        }
+        setString("prevGuesses", saveData.join(','));
 
         if (currentWord === word) {
             //Display a message if the word is correct.
             gameFinished = true;
             points = 4 - guessedWordCount;
             correctAnimation(points);
-            updateScore(points);
+            if (loading === false) {
+                updateScore(points);
+            }
         }
-        else if (guessedWords.length === numGuesses) {
+        else if (guessedLetters.length === numGuesses) {
             //Display the correct word if all guesses have been used.
             clueAnimation(currentWordArr, correctnessArr);
             failAnimation();
             if (allLettersFound()) {
                 points = 1;
-                updateScore(points);
+                if (loading === false) {
+                    updateScore(points);
+                }
             }
             else {
                 points = 0;
-                updateScore(points);
+                if (loading === false) {
+                    updateScore(points);
+                }
             }
         }
         else {
@@ -323,8 +373,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //Increment the number of guesses used.
         guessedWordCount += 1;
 
-        //Add the new guess to the guessed words list.
-        guessedWords.push([])
+        //Add a new empty guess to the guessed words list.
+        guessedLetters.push([]);
     }
 
     function allLettersFound() {
@@ -472,7 +522,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentWordArr = getCurrentWordArray();
         currentWordArr.pop();
 
-        guessedWords[guessedWords.length - 1] = currentWordArr;
+        guessedLetters[guessedLetters.length - 1] = currentWordArr;
         const deletedLetterEl = document.getElementById(String(nextSpace - 1));
         deletedLetterEl.textContent = "";
         nextSpace -= 1;
