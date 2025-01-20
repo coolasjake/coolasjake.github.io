@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let numGuesses = 3;
     let mustBeWord = false;
     let randomWord = false;
+    let doSaving = true;
     let showCorrect = false;
     let printShapeDistributions = false;
 
@@ -33,13 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
     let gameFinished = false;
     let loading = true;
 
+    if (pageName == "shapel-random") {
+        randomWord = true;
+        doSaving = false;
+    }
+
     setupKeys();
     setupInfoBox();
     chooseWord();
     createLetterSlots();
 
     setupLetters();
-    loadData();
+    if (doSaving) {
+        loadData();
+    }
 
     function chooseWord() {
         analyseWords();
@@ -333,12 +341,15 @@ document.addEventListener("DOMContentLoaded", () => {
         
         console.log(guessedLetters);
 
-        let saveData = [];
-        //Save the word in local data.
-        for (let i = 0; i < guessedLetters.length; i++) {
-            saveData.push(guessedLetters[i].join(''));
+        
+        if (doSaving) {
+            let saveData = [];
+            //Save the word in local data.
+            for (let i = 0; i < guessedLetters.length; i++) {
+                saveData.push(guessedLetters[i].join(''));
+            }
+            setString("prevGuesses", saveData.join(','));
         }
-        setString("prevGuesses", saveData.join(','));
 
         if (currentWord === word) {
             //Display a message if the word is correct.
@@ -388,6 +399,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateScore(points) {
+        if (doSaving === false) {
+            return;
+        }
+        
         if (points > 1) {
             numWins = updateValue("numWins", 1);
         }
