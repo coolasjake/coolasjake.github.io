@@ -33,8 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let gameFinished = false;
     let loading = true;
+    const dayIndex = getDay();
 
-    if (pageName == "shapel-random") {
+    if (pageName == "shapel-random.html") {
         randomWord = true;
         doSaving = false;
     }
@@ -57,8 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             word = allWordsList[randIndex];
         }
         else {
-            const day = getDay();
-            word = dailyWordsList[day];
+            //const day = getDay();
+            word = dailyWordsList[dayIndex];
         }
         wordShape = wordCode(word);
         //console.log(word);
@@ -120,16 +121,19 @@ document.addEventListener("DOMContentLoaded", () => {
         totalScore = loadValue("totalScore");
         numGames = loadValue("numGames");
         numWins = loadValue("numWins");
-        let prevGuessesString = loadString("prevGuesses");
-        if (prevGuessesString !== 0) {
-            console.log(prevGuessesString);
-            let prevGuesses = prevGuessesString.split(",");
-            for (let i = 0; i < prevGuesses.length; i++) {
-                let prevGuess = prevGuesses[i].split('');
-                for (let j = 0; j < prevGuess.length; j++) {
-                    updateGuessedWords(prevGuess[j]);
+        let saveDay = loadValue("saveDate");
+        if (saveDay === dayIndex) {
+            let prevGuessesString = loadString("prevGuesses");
+            if (prevGuessesString !== 0) {
+                console.log(prevGuessesString);
+                let prevGuesses = prevGuessesString.split(",");
+                for (let i = 0; i < prevGuesses.length; i++) {
+                    let prevGuess = prevGuesses[i].split('');
+                    for (let j = 0; j < prevGuess.length; j++) {
+                        updateGuessedWords(prevGuess[j]);
+                    }
+                    handleSubmitWord();
                 }
-                handleSubmitWord();
             }
         }
         loading = false;
@@ -349,6 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 saveData.push(guessedLetters[i].join(''));
             }
             setString("prevGuesses", saveData.join(','));
+            setValue("saveDate", dayIndex)
         }
 
         if (currentWord === word) {
@@ -402,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (doSaving === false) {
             return;
         }
-        
+
         if (points > 1) {
             numWins = updateValue("numWins", 1);
         }
