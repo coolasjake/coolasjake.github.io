@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let loading = true;
     const dayIndex = getDay();
 
-    if (pageName == "shapel-random.html") {
+    if (pageName == "shapel-random.html" || pageName == "shapel-random") {
         randomWord = true;
         doSaving = false;
     }
