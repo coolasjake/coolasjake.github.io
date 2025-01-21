@@ -4,6 +4,8 @@ import { letterShapeCodes, letterShapes } from "./letter_shapes.js"
 //Add a trigger for when the document has finished loading.
 document.addEventListener("DOMContentLoaded", () => {
     var pageName = (window.location.pathname).split("/").pop();
+    pageName = pageName.split(".html")[0];
+    console.log(pageName);
 
     //Get a list of keys (buttons within an element with the 'keyboard-row' class)
     const keys = document.querySelectorAll('.keyboard-row button')
@@ -16,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let numGuesses = 3;
     let mustBeWord = false;
     let randomWord = false;
-    let doSaving = true;
+    let saveLoadScore = true;
+    let saveLoadGuesses = true;
     let showCorrect = false;
     let printShapeDistributions = false;
 
@@ -32,12 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let guessedWordCount = 0;
 
     let gameFinished = false;
-    let loading = true;
+    let loading = false;
     const dayIndex = getDay();
 
     if (pageName == "shapel-random.html" || pageName == "shapel-random") {
         randomWord = true;
-        doSaving = false;
+        saveLoadGuesses = false;
     }
 
     setupKeys();
@@ -46,9 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     createLetterSlots();
 
     setupLetters();
-    if (doSaving) {
-        loadData();
-    }
+    loadData();
 
     function chooseWord() {
         analyseWords();
@@ -118,61 +119,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     function loadData() {
-        totalScore = loadValue("totalScore");
-        numGames = loadValue("numGames");
-        numWins = loadValue("numWins");
-        let saveDay = loadValue("saveDate");
-        if (saveDay === dayIndex) {
-            let prevGuessesString = loadString("prevGuesses");
-            if (prevGuessesString !== 0) {
-                console.log(prevGuessesString);
-                let prevGuesses = prevGuessesString.split(",");
-                for (let i = 0; i < prevGuesses.length; i++) {
-                    let prevGuess = prevGuesses[i].split('');
-                    for (let j = 0; j < prevGuess.length; j++) {
-                        updateGuessedWords(prevGuess[j]);
-                    }
-                    handleSubmitWord();
-                }
-            }
+        if (saveLoadScore) {
+            totalScore = loadValue("totalScore");
+            numGames = loadValue("numGames");
+            numWins = loadValue("numWins");
         }
-        loading = false;
+        let saveDay = loadValue("saveDate");
+        if (saveLoadGuesses && (saveDay === dayIndex || randomWord)) {
+            let prevGuessesString = loadString("prevGuesses");
+            if (prevGuessesString === 0) {
+                return;
+            }
+            
+            let prevGuesses = prevGuessesString.split(",");
+            loading = true;
+            for (let i = 0; i < prevGuesses.length; i++) {
+                let prevGuess = prevGuesses[i].split('');
+                for (let j = 0; j < prevGuess.length; j++) {
+                    updateGuessedWords(prevGuess[j]);
+                }
+                handleSubmitWord();
+            }
+            loading = false;
+        }
     }
     
     function setValue(name, value) {
+        let modeName = pageName + ": " + name;
         let newValue = parseInt(value);
-        localStorage.setItem(name, newValue);
+        localStorage.setItem(modeName, newValue);
         return newValue;
     }
     
     function updateValue(name, change) {
-        let newValue = parseInt(localStorage.getItem(name)) + change;
-        localStorage.setItem(name, newValue);
+        let modeName = pageName + ": " + name;
+        let newValue = parseInt(localStorage.getItem(modeName)) + change;
+        localStorage.setItem(modeName, newValue);
         return newValue;
     }
 
     function loadValue(name) {
-        if (localStorage.getItem(name) === null) {
-            localStorage.setItem(name, 0);
+        let modeName = pageName + ": " + name;
+        if (localStorage.getItem(modeName) === null) {
+            localStorage.setItem(modeName, 0);
             return 0;
         }
         else {
-            return parseInt(localStorage.getItem(name));
+            return parseInt(localStorage.getItem(modeName));
         }
     }
     
     function setString(name, value) {
-        localStorage.setItem(name, value);
+        let modeName = pageName + ": " + name;
+        localStorage.setItem(modeName, value);
         return value;
     }
 
     function loadString(name) {
-        if (localStorage.getItem(name) === null) {
-            localStorage.setItem(name, 0);
+        let modeName = pageName + ": " + name;
+        if (localStorage.getItem(modeName) === null) {
+            localStorage.setItem(modeName, 0);
             return 0;
         }
         else {
-            return localStorage.getItem(name);
+            return localStorage.getItem(modeName);
         }
     }
 
@@ -346,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(guessedLetters);
 
         
-        if (doSaving) {
+        if (saveLoadGuesses) {
             let saveData = [];
             //Save the word in local data.
             for (let i = 0; i < guessedLetters.length; i++) {
@@ -404,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateScore(points) {
-        if (doSaving === false) {
+        if (saveLoadScore === false) {
             return;
         }
 
