@@ -5,7 +5,6 @@ import { letterShapeCodes, letterShapes } from "./letter_shapes.js"
 document.addEventListener("DOMContentLoaded", () => {
     var pageName = (window.location.pathname).split("/").pop();
     pageName = pageName.split(".html")[0];
-    console.log(pageName);
 
     //Get a list of keys (buttons within an element with the 'keyboard-row' class)
     const keys = document.querySelectorAll('.keyboard-row button')
@@ -27,6 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let numGames = 0;
     let numWins = 0;
     let points = 0;
+    let pointsText = null;
+    let displayPoints = 0;
+    let currentDisplayPoints = 0;
+    let pointsAnimStart = 0;
+    let pointsAnimDur = 500;
     let matchingWords = [];
 
     let guessedLetters = [[]]
@@ -100,13 +104,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             codeDict[code].push(word);
         }
-
+        
+        /*
         if (printShapeDistributions) {
             for (const key of Object.keys(codeDict)) {
                 //console.log(`${key}= ${codeDict[key].length} ${codeDict[key]}`);
                 console.log(`${codeDict[key].length}: ${codeDict[key]}`);
             }
         }
+        */
     }
 
     function getDay() {
@@ -218,10 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentWordArr && currentWordArr.length < numLetters) {
             currentWordArr.push(letter);
 
-            const availableSpaceEl = document.getElementById(String(nextSpace));
+            const availableSpaceEl = document.getElementById(`slot${nextSpace}`);
             nextSpace = nextSpace + 1;
 
             availableSpaceEl.textContent = letter;
+            availableSpaceEl.classList.add("safariUpdater");
         }
     }
 
@@ -332,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentWordArr.length !== numLetters || (!allWordsList.includes(currentWord) && mustBeWord)) {
             for (let index = 0; index < numLetters; index++) {
                 const letterId = firstLetterId + index;
-                const letterEl = document.getElementById(letterId);
+                const letterEl = document.getElementById(`slot${letterId}`);
 
                 if (!letterEl.classList.contains("animate__headShake")){
                     letterEl.classList.add("animate__headShake");
@@ -349,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const correctnessArr = getWordCorrectness(currentWordArr);
         updateKeyboard(currentWord, correctnessArr);
         
-        console.log(guessedLetters);
+        //console.log(guessedLetters);
 
         
         if (saveLoadGuesses) {
@@ -365,7 +372,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentWord === word) {
             //Display a message if the word is correct.
             gameFinished = true;
-            points = 4 - guessedWordCount;
+            points = 0;
+            let delay = 2.5
+            if (guessedWordCount <= 2) {    //Correct in 3 or less guesses
+                points += 2;
+                if (loading === false) {
+                }
+                    let row = document.getElementById('board-row3')
+                    pointAnimation(row, 100, delay, true) //HERE
+                    delay += 1.5
+            }
+            if (guessedWordCount <= 1) {    //Correct in 2 or less guesses
+                points += 2;
+                if (loading === false) {
+                }
+                    let row = document.getElementById('board-row2')
+                    pointAnimation(row, 100, delay, true) //HERE
+                    delay += 1.5
+            }
+            if (guessedWordCount == 0) {    //Correct in 1 guess
+                points += 1;
+                if (loading === false) {
+                }
+                    let row = document.getElementById('board-row1')
+                    pointAnimation(row, 50, delay, true) //HERE
+                    delay += 1.5
+            }
             correctAnimation(points);
             if (loading === false) {
                 updateScore(points);
@@ -380,6 +412,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (loading === false) {
                     updateScore(points);
                 }
+                    let row = document.getElementById('board-row3')
+                    let delay = 2.5
+                    pointAnimation(row, 50, delay, false) //HERE
             }
             else {
                 points = 0;
@@ -397,6 +432,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //Add a new empty guess to the guessed words list.
         guessedLetters.push([]);
+    }
+
+    function pointAnimation(startElement, value, delay, fireworks) {
+        //var startRect = startElement.getBoundingClientRect();
+        //var endElement = document.getElementsByClassName("points-stat")
+        //var endRect = endElement.getBoundingClientRect();
+        //var startAbs = startRect.top;
+        var pointsAddDelay = 1.5;
+        var pointsDeleteDelay = 5;
+
+        setTimeout(() => {
+            let pointsElem = document.createElement("div")
+            if (fireworks) {
+                pointsElem.classList.add("points-adder")
+            }
+            else {
+                pointsElem.classList.add("points-adder-wrong")
+            }
+            //pointsElem.setAttribute("animation-delay", `${delay}s`)
+            pointsElem.textContent = `+${value}pts`
+            startElement.appendChild(pointsElem)
+            if (fireworks) {
+                let fireworksHolder = document.createElement("div")
+                fireworksHolder.classList.add("fireworks-holder")
+                fireworksHolder.innerHTML = `<div class="pyro">
+                    <div class="before"></div>
+                </div>`
+                startElement.appendChild(fireworksHolder)
+            }
+            setTimeout(() => {
+                displayPoints += value
+                animatePointsTotal()
+            }, pointsAddDelay*1000)
+            setTimeout(() => {
+                //pointsElem.remove();
+            }, pointsDeleteDelay*1000)
+        }, delay*1000)
+    }
+
+    function updatePoints(timestamp) {
+        //console.log(`stamp: ${timestamp}, start: ${pointsAnimStart}, dur: ${pointsAnimDur}`)
+        let progress = Math.min(1, (timestamp - pointsAnimStart) / pointsAnimDur);
+        let currentScore = Math.round(currentDisplayPoints + progress * (displayPoints - currentDisplayPoints));
+        let pointsText = document.getElementById("points-stat");
+        pointsText.textContent = "Points: "+currentScore;
+  
+        if (progress < 1) {
+            requestAnimationFrame(updatePoints);
+        }
+        else {
+            currentDisplayPoints = displayPoints;
+        }
+    }
+  
+    function animatePointsTotal() {
+        pointsAnimStart = performance.now();
+        requestAnimationFrame(updatePoints);
     }
 
     function allLettersFound() {
@@ -429,22 +521,19 @@ document.addEventListener("DOMContentLoaded", () => {
         let wordArr = word.split("");
         wordArr.forEach((letter, index) => {
             const letterId = firstLetterId + index;
-            const letterEl = document.getElementById(letterId);
+            const letterEl = document.getElementById(`slot${letterId}`);
             setTimeout(() => {
                 letterEl.classList.add("animate__flipInX");
-                letterEl.classList.add(getCorrectnessClass("RightPlace"));
-                //const tileColour = getCorrectnessClass("RightPlace");
-                //letterEl.style = `background-color:${tileColour};`;
-
+                letterEl.classList.add("answerCol");
             }, interval * index)
         });
 
-        let endMessage = "hurray";
-        if (score === 4) {
-            endMessage = "superb";
+        let endMessage = "error";
+        if (score === 5) {
+            endMessage = "unreal";
         }
-        else if (score === 3) {
-            endMessage = "huzzah"
+        else if (score === 4) {
+            endMessage = "woohoo"
         }
         else if (score === 2) {
             endMessage = "hooray";
@@ -459,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const interval = 200;
         currentWordArr.forEach((letter, index) => {
             const letterId = firstLetterId + index;
-            const letterEl = document.getElementById(letterId);
+            const letterEl = document.getElementById(`slot${letterId}`);
             setTimeout(() => {
                 letterEl.classList.add("animate__flipInX");
                 let correctness = correctnessArr[index];
@@ -468,7 +557,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         correctness = "WrongPlace";
                     }
                     letterEl.classList.add(getCorrectnessClass(correctness));
-                    letterEl.style = `background-color:${tileColour};`;
                 }
 
             }, interval * index)
@@ -506,8 +594,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 </span>
                 <span id="stats">
                     <div class="game-stats">Games played: ${numGames}</div>
-                    <div class="game-stats">Game Point Average: ${gamePointAverage}%</div>
+                    <div class="game-stats" id="points-stat">Points: 0</div>
+                    <div class="game-stats">Average Points: ${gamePointAverage}pts</div>
                 </span>`;
+
+                pointsText = document.getElementById("points-stat");
 
                 const resultShapes = section.getElementsByClassName("result-shape");
                 Array.from(resultShapes).forEach((shape, index) => {
@@ -550,8 +641,9 @@ document.addEventListener("DOMContentLoaded", () => {
         currentWordArr.pop();
 
         guessedLetters[guessedLetters.length - 1] = currentWordArr;
-        const deletedLetterEl = document.getElementById(String(nextSpace - 1));
+        const deletedLetterEl = document.getElementById(`slot${nextSpace - 1}`);
         deletedLetterEl.textContent = "";
+        deletedLetterEl.classList.remove("safariUpdater");
         nextSpace -= 1;
     }
 
@@ -560,6 +652,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const gameBoard = document.getElementById("board")
 
         for (let j = 0; j < numGuesses; j++) {
+            let row = document.createElement("div")
+            row.id = `board-row${j+1}`
+            row.classList.add("board-row")
+            gameBoard.appendChild(row)
             for (let i = 0; i < numLetters; i++) {
                 //Create a div element.
                 let letterSlot = document.createElement("div");
@@ -576,9 +672,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 letterSlot.classList.add("animate__animated");
                 //Set the id to index (+1).
-                letterSlot.setAttribute("id", j * numLetters + i + 1);
+                letterSlot.setAttribute("id", `slot${j * numLetters + i + 1}`);
                 //Add the letter to the board.
-                gameBoard.appendChild(letterSlot);
+                row.appendChild(letterSlot);
             }
         }
     }

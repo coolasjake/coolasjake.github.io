@@ -1,7 +1,6 @@
 @font-face {
     font-family: info;
     src: url(Avenir_Next.ttf);
-    /*src: url(Shapel1Longer-Regular.ttf);*/
 }
 
 * {
@@ -17,41 +16,45 @@
     --highCol:  #5EBE74;
     --lowCol: #4AC0F4;
     --correctCol: #F9EB32;
-    --answerCol: #F9EB32;
+    --answerCol: #A0F03C;
     --deleteCol: #FF522A;
     --submitCol: #A0F03C;
-    --infoCol: #f7a9a8;
-    --infoBoxCol: #f3dad8;
+    --infoCol: #e4f0ee;/* #f7a9a8; */
+    --infoBoxCol: #e4f0ee;/* #f3dad8; */
     --infoBoxCloseCol: #a3a3a3;
     --infoBoxCloseHoverCol: #000000;
     --backgroundCol: #000000;
-    --outlineCol: #3a3a3c;
+    --lineCol: #3a3a3c;
+    --outlineCol: #000000;
     --textCol: #182825;
     --scoreTextCol: #e4f0ee;
 }
 
-/*Avenir settings.
+/*Thin Lines and Curves font settings.*/
 :root {
-    --fontSizeMult: 0.8;
-    --lineHeightMult: 0.65;
-    --paddingMult: 0.5;
+    --fontSizeMult: 0.75;
+    --lineHeightMult: 0.95;
+    --paddingMult: 0.75;
 }
-
 @font-face {
     font-family: shapel;
-    src: url(Avenir_Next.ttf);
-}*/
-
-/*Custom Shapel font settings.*/
-:root {
-    --fontSizeMult: 1;
-    --lineHeightMult: 1;
-    --paddingMult: 1;
+    font-weight: 600;
+    src: url(ThickLinesandCurves.otf);
 }
-
 @font-face {
     font-family: shapel;
-    src: url(Shapel1Longer-Regular.ttf);
+    font-weight: 800;
+    src: url(ThickLinesandCurves-ExtraBold.otf);
+}
+@font-face {
+    font-family: shapel-buttons;
+    font-weight: 600;
+    src: url(ThickLinesandCurvesButtons.otf);
+}
+@font-face {
+    font-family: shapel-buttons;
+    font-weight: 800;
+    src: url(ThickLinesandCurvesButtons-ExtraBold.otf);
 }
 
 html, body {
@@ -81,7 +84,7 @@ html, body {
 header {
     margin-top: 2vh;
     height: 12vh;
-    border-bottom: 1px solid var(--outlineCol);
+    border-bottom: 1px solid var(--lineCol);
 }
 
 .title-container {
@@ -100,7 +103,15 @@ header {
     padding-bottom: 1vh;
 }
 
-#board, #results-grid {
+#board {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-row-gap: 2vh;
+    grid-column-gap: 0.5vh;
+    box-sizing: border-box;
+}
+
+.board-row, #results-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-row-gap: 2vh;
@@ -120,13 +131,13 @@ header {
     justify-content: top;
     align-items: top;
     overflow: hidden;
-    border-top: 1px solid var(--outlineCol);
+    border-top: 1px solid var(--lineCol);
     padding-top: 1vh;
 }
 
 #stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     height: 10vh;
     justify-content: top;
     align-items: top;
@@ -152,12 +163,13 @@ header {
 .small, .high, .low, .logo-small, .logo-low, .logo-high {
     width: 4vh;
     height: 4vh;
-    font-size: calc(7vh * var(--fontSizeMult));
+    font-size: calc(6vh * var(--fontSizeMult));
     color: var(--textCol);
     border: 2px solid var(--outlineCol);
     border-radius: 4px;
     text-transform: lowercase;
     font-family: shapel;
+    font-weight: 800;
     line-height: calc(4.5vh * var(--lineHeightMult));
 
     display: flex;
@@ -206,6 +218,12 @@ header {
     }
 }
 
+.logo-image {
+    height: 9vh;
+    justify-content: center;
+    align-content: center;
+}
+
 .logo-small, .logo-low, .logo-high {
     line-height: calc(3.5vh * var(--lineHeightMult));
     width: 3vh;
@@ -232,7 +250,7 @@ header {
 }
 
 #phone-kb, #desktop-kb {
-    border-top: 1px solid var(--outlineCol);
+    border-top: 1px solid var(--lineCol);
     padding-top: 3vh;
     height: 20vh;
     position: relative;
@@ -256,9 +274,9 @@ header {
 }
 
 .keyboard-row button {
-    font-family: shapel;
-    font-size: calc(4.5vh * var(--fontSizeMult));
-    font-weight: 200;
+    font-family: shapel-buttons;
+    font-size: calc(5.5vh * var(--fontSizeMult));
+    font-weight: 800;
     border: 2px solid var(--outlineCol);
     cursor: pointer;
     text-transform: lowercase;
@@ -328,18 +346,51 @@ button.post-game {
     color: var(--scoreTextCol);
 }
 
+.points-adder, .points-adder-wrong {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,0);
+    margin-top: 4vh;
+    opacity: 0;
+    animation-name: points-anim;
+    animation-duration: 3s;
+}
+.points-adder {
+    color: var(--answerCol);
+}
+.points-adder-wrong {
+    color: var(--scoreTextCol);
+}
+
+@keyframes points-anim {
+    0%   {margin-top: 0vh; opacity: 1;}
+    30%  {margin-top: -4vh; opacity: 1;}
+    50%  {margin-top: -4vh; opacity: 1;}
+    100%  {margin-top: 8vh; opacity: 0;}
+}
+@keyframes points-anim1 {
+    0%   {margin-top: 0vh; opacity: 1;}
+    50%  {margin-top: -4vh; opacity: 1;}
+    100%  {margin-top: 40vh; opacity: 0;}
+}
+
+.fireworks-holder {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
 .info-container {
     position: absolute;
     float: right;
 }
 
 #info-button {
-    background-color: var(--infoCol);
-    /* font-family: shapel; */
-    height: 4vh;
-    width: 4vh;
+    background-color: transparent;/* var(--infoCol); */
+    height: 6vh;
+    width: 6vh;
     font-size: calc(3vh * var(--fontSizeMult));
-    font-weight: 200;
+    font-weight: 400;
     font-style: bold;
     border: 2px solid var(--outlineCol);
     cursor: pointer;
@@ -352,6 +403,10 @@ button.post-game {
     border-radius: 4px;
     user-select: none;
     float: right;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url(images/Info.png);
 }
 
 .info-box {
@@ -370,7 +425,7 @@ button.post-game {
 
 .info-box-content {
     text-align: center;
-    background-color: #f3dad8;
+    background-color: var(--infoBoxCol);
     border-radius: 4px;
     max-width: min(80vh, 80vw);
     margin: auto; /* 5vh; */
@@ -440,7 +495,11 @@ button.post-game {
 }
 
 .answerCol {
-    background-color: var(--correctCol);
+    background-color: var(--answerCol);
+}
+
+.safariUpdater {
+    transform: scale(1.0000001);
 }
 
 #WrongPlace {
