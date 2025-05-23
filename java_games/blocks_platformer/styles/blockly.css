@@ -70,8 +70,7 @@ h1 {
 #code-buttons-tray {
   position: relative;
   display: flex;
-  flex-flow: row;
-  /* justify-content: space-between; */
+  flex-flow: column;
 }
 
 .code-button {
@@ -83,9 +82,14 @@ h1 {
   text-align: center;
   vertical-align: baseline;
   border-radius: 4px;
+  margin-bottom: 5px;
 }
 
+.resume-button {
+  background-color: rgb(35, 216, 38);
+}
 .mode-button {
   margin: 1em 0;
   float: right;
+  height: 40px;
 }

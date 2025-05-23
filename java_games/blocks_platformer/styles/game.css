@@ -24,6 +24,9 @@ main {
 .wall          { background: white;              }
 .actor  { position: absolute;            }
 .coin   { background: rgb(241, 229, 89); }
+.btn_red { background: rgb(255, 50, 50); }
+.btn_green { background: rgb(50, 255, 50); }
+.btn_blue { background: rgb(50, 50, 255); }
 .player { background: rgb(64, 64, 64);   }
 .lost .player {
     background: rgb(160, 64, 64);
