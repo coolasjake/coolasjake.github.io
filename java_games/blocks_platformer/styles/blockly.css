@@ -1,0 +1,95 @@
+#old {
+  width: 400px;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  height: 600px;
+}
+
+header {
+  background-color: green;
+  width: 100%;
+}
+
+h1 {
+  width: 400px;
+  position: relative;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 1.8em;
+  line-height: 2.4em;
+}
+
+.mode-select,
+.mode-play,
+.mode-code {
+  display: none;
+  /* cursor: not-allowed;
+  opacity: 0.8; */
+}
+
+[mode='play'] .mode-play,
+[mode='code'] .mode-code,
+[mode='select'] .mode-select {
+  display: block;
+  /* cursor: pointer;
+  opacity: 1; */
+}
+
+.blockly-editor {
+  display: flex;
+  flex-grow: 1;
+  background-color: #aaa;
+}
+
+#blocklyDiv {
+  height: 100%;
+  width: 100%;
+  opacity: 0.6;
+  background-color: #fff;
+}
+[mode='code'] #blocklyDiv {
+  opacity: 1;
+}
+
+.options {
+  display: flex;
+  flex-flow: column;
+  padding: 2px;
+}
+
+.mode-options {
+  border-bottom: 1px solid var(--lineCol);
+}
+
+.maker > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#code-buttons-tray {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+}
+
+.code-button {
+  width: 120px;
+  height: 40px;
+  color: #fff;
+  background-color: darkslategray;
+  font-size: 1em;
+  text-align: center;
+  vertical-align: baseline;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.resume-button {
+  background-color: rgb(35, 216, 38);
+}
+.mode-button {
+  margin: 1em 0;
+  float: right;
+  height: 40px;
+}
