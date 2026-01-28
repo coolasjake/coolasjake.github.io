@@ -1,0 +1,966 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Dookie Dodger Unity Tutorial</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/tutorials.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Home</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <h1>Dookie Dodger Tutorial</h1>
+            <p>This is a game where we move our car left and right to dodge the bird poos dropping down on us. This
+                project will
+                teach you how to use many important basic features of Unity like how to edit scenes and objects, how to
+                set up
+                prefabs, physics and UI, and how to write simple code.</p>
+                <img class="main-img" src=".images/DookieDodger.gif" alt="" />
+                
+            <h2 id="create-unity-project">Create Unity Project</h2>
+            <ul>
+                <li>Create a new 3D Unity project and call it &#39;Dookie Dodger&#39;.<ul>
+                        <li>(This project was designed for version 2021.3, but will work in most other versions)</li>
+                    </ul>
+                </li>
+            </ul>
+            <h2 id="layout-and-windows-">Layout and Windows:</h2>
+            <p>To build games in Unity you need to use different &#39;Windows&#39; to edit each part of the game.
+                Windows can be
+                moved, opened and closed, but the default layout has everything you need to make simple games. You can
+                reset to the
+                default layout by opening the layout dropdown in the top right.</p>
+
+            <img class="main-img" src="./images/DD01_layout.png" alt="">
+            <aside>
+                1: Layout presets. 2: Menu Bar. 3: Heirarchy. 4: Inspector. 5: Projects (Assets).</aside>
+
+            <h4 id="assets-and-scenes-">Assets and Scenes:</h4>
+            <ul>
+                <li>On the bottom left is the &#39;Project&#39; window, which shows all the files and folders in your
+                    unity project.<ul>
+                        <li>The Assets folder should already have a folder called &#39;Scenes&#39;, with a file called
+                            &#39;SampleScene&#39; in it. Scenes are collections of objects used to make different levels
+                            or sections of a game.</li>
+                    </ul>
+                </li>
+                <li>Copy the &#39;DookieStarterFiles&#39; asset pack into the assets folder.</li>
+                <li>Click &#39;Import&#39; in the menu that pops up.<ul>
+                        <li>If you drag the pack into Unity directly it should open the import menu automatically.</li>
+                        <li>If not, you can double click on the file in unity.</li>
+                    </ul>
+                </li>
+                <li>Go into the scenes folder and open the &#39;DookieDodger&#39; scene.</li>
+            </ul>
+            <h4 id="editing-objects-">Editing Objects:</h4>
+            <ul>
+                <li>The window on the left is called the Heirarchy - it has a list of all the objects in the scene.</li>
+                <li>Click on the &#39;Ground&#39; object in the Heirarchy. This will open up information about the
+                    object in the Inspector window on the right.</li>
+                <li>It will also highlight the object in the Scene view. You can look around the scene by holding
+                    right-click then moving your mouse or pressing W/A/S/D.<ul>
+                        <li>To &#39;focus&#39; on an object in the scene view, click on it in the heirarchy then put
+                            your mouse in the scene view window and press &#39;F&#39;.</li>
+                    </ul>
+                </li>
+                <li>With the Ground object selected, look in the inspector. Objects in Unity are made up of
+                    &#39;components&#39; which create different parts of the object like what it looks like, how it
+                    interacts with physics, or special custom behaviors.</li>
+                <li>Objects always have a Name at the top, and a &#39;Transform&#39; component just beneath it that
+                    controls where it is (position), how it is rotated (rotation) and how big it is (scale).</li>
+                <li>Select the &#39;Ground&#39; object and check that the position says (0, 0, 0), and the scale says
+                    (5, 5, 5). Change some of these Transform numbers to see what they do, then return them to the
+                    original values by pressing ctrl+z to undo.</li>
+            </ul>
+            <h2 id="set-up-the-scene-">Set up the Scene:</h2>
+            <h4 id="road-">Road:</h4>
+            <ul>
+                <li>Go into the textures folder, and drag the &#39;Road&#39; texture on to the Ground plane in the scene
+                    view.<ul>
+                        <li>This will make it look like there is a road on the plane and also creates a new folder
+                            called &#39;materials&#39; with a new material in it.</li>
+                        <li>Materials are used to define what an object looks like. Changing a material will change all
+                            objects that use it, so you usually need a new material for each different object.</li>
+                    </ul>
+                </li>
+            </ul>
+            <h4 id="power-lines-">Power-lines:</h4>
+            <ul>
+                <li>Go into the models folder, and drag the powerpole model into the scene next to the road.</li>
+                <li>Change its position using the inspector: (-5, 0, -15) works well.</li>
+                <li>Open the &#39;materials&#39; folder, then right-click. In the menu that opens, go to
+                    &#39;Create&#39; at the top, then select &#39;Material&#39; near the middle.</li>
+                <li>Call the new material &#39;Powerpole&#39;.</li>
+                <li>Select the material - its properties will appear in the inspector.</li>
+                <li>Click on the white square next to where it says &#39;colour&#39; and use the window that pops up to
+                    change it to good colour for a power-pole (e.g. brown).</li>
+                <li>Drag the new material onto the power pole in the scene view.</li>
+                <li>Select the pole and use ctrl+d to duplicate it.</li>
+                <li>Move the new pole 30 units along the road.<ul>
+                        <li>Tip: you can &#39;add&#39; to numbers in fields instead of just changing them:</li>
+                        <li>After selecting the second poles, click on the &#39;z&#39; field (this will select the
+                            number), then click again (this will put the cursor in the field) then type &#39;+30&#39; at
+                            the end of the number to &#39;add&#39; to it instead of replacing it.</li>
+                        <li>You can see it move as you type, and once you press enter or click on something else, the
+                            number in the field will change to the result of the maths.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>We have the power poles now, but we want power lines for the bird to sit on.</p>
+            <ul>
+                <li>Create a &#39;line renderer&#39; object by going to the Menu Bar and clicking
+                    GameObject-&gt;Effects-&gt;Line.</li>
+                <li>In the heirarchy, select the new line object, then click and drag it onto the first power pole. This
+                    makes it a &#39;child&#39; of the power pole, meaning its position, rotation and scale will be based
+                    on those of the Parent.</li>
+                <li>Move the line so that its origin aligns with one of the spikes.<ul>
+                        <li>Tip: (3,-0.7,15) is a good position.</li>
+                    </ul>
+                </li>
+                <li>A line renderer draws a line connecting each of the points we give it - we can see these in the
+                    inspector by clicking where it says &#39;points&#39; to open the dropdown.</li>
+                <li>Keep the first point at (0, 0, 0), but change the second point to line up with the second power
+                    pole.<ul>
+                        <li>If you did the last step right this should be easy - just set the point to (0, 0, 30).</li>
+                    </ul>
+                </li>
+                <li>The line looks right now except for the colour - create a new material for it just like we did for
+                    the power poles (black is a good colour).</li>
+                <li>Now that the line looks good, duplicate it 3 times using ctrl+D, and move the new ones to connect
+                    each set of power pole spikes.<ul>
+                        <li>Tip: You can move objects with the position numbers, or by using the move tool in the scene
+                            view (hotkey: &#39;W&#39;).</li>
+                    </ul>
+                </li>
+            </ul>
+            <h3 id="bird-model-">Bird Model:</h3>
+            <ul>
+                <li>Go into the models folder and drag the seagull model into the scene.</li>
+                <li>The seagull has been set up to work with a special texture - find the seagull texture and drag it
+                    onto the seagull.<ul>
+                        <li>This will create a new material called &#39;Seagull&#39;.</li>
+                        <li>Since the seagull is made of 3 seperate objects (body, wings and legs), we need to drag the
+                            material onto each of them.</li>
+                    </ul>
+                </li>
+                <li>Move the seagull so that it is sitting on the powerline closest to the road.</li>
+            </ul>
+            <h3 id="camera-">Camera:</h3>
+            <ul>
+                <li>The camera is an object in the scene which is used when we actually play the game. It can be moved
+                    around (e.g. by making it a child object of a player character), and usually show something
+                    different to the scene view camera.</li>
+                <li>(Skip this step if the camera is already set up nicely in the scene)</li>
+                <li>You could move the camera manually, but it&#39;s easier to copy your scene view perspective onto it.
+                </li>
+                <li>Move the scene view camera so that you can see the bird, the power-lines, and the road.</li>
+                <li>Right click on the &#39;MainCamera&#39; object in the hierarchy, and select &#39;align to view&#39;.
+                </li>
+                <li>This will let us see everything nicely when we play the game.</li>
+            </ul>
+            <p>Next we need to make the &#39;poop&#39; projectiles that the player will have to dodge. We&#39;ll do this
+                by making special objects called prefabs that we can duplicate using some code. The first object will be
+                for when the poop is falling, and the second will be for when it splats on the ground (or the car).</p>
+            <h3 id="poop-projectile-">Poop Projectile:</h3>
+            <ul>
+                <li>Create a sphere object by clicking GameObject-&gt;3D Object-&gt;Sphere.</li>
+                <li>Change the name to &#39;FallingPoop&#39;.</li>
+                <li>Use the &#39;scale&#39; property in the transform component to make it a good size compared to the
+                    bird.<ul>
+                        <li>Tip: you can click the chain icon to make x, y, z all change at the same time.</li>
+                    </ul>
+                </li>
+                <li>Use menu bar to add a particle effect to the poop.</li>
+                <li>Edit the particle effect to look like a trail of stink or dirt coming off the poop:<ul>
+                        <li>Change the start lifetime to 0.5.</li>
+                        <li>Change the start speed to 1.</li>
+                        <li>Change the start colour to brown.</li>
+                        <li>Change the gravity modifier to 1.</li>
+                        <li>Change the simulation space to &#39;world&#39; (this will let the particle trail behind the
+                            poop when it moves, instead of moving with the poop).</li>
+                    </ul>
+                </li>
+                <li>In Emission:<ul>
+                        <li>Change the rate over time to 10.</li>
+                        <li>Change the rate over distance to 1 (this will make more particles spawn when the poop is
+                            moving faster).</li>
+                    </ul>
+                </li>
+                <li>In Shape:<ul>
+                        <li>Change the angle to 10.</li>
+                        <li>Change the radius to be smaller than the poop (e.g. 0.3).</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>This will be the poop that comes out of the bird, but it wouldn&#39;t look right if it stayed like this
+                after it hit the ground, so lets make a different poop for it to turn into when it hits something:</p>
+            <h3 id="squished-poop-">Squished Poop:</h3>
+            <ul>
+                <li>Create another sphere and call it &#39;SquishedPoop&#39;.</li>
+                <li>DELETE the collider from this sphere.</li>
+                <li>Move it so that the middle of it is touching the road (e.g. 0, 0, 0).</li>
+                <li>Make the y scale of the sphere 0.2 (scale = 1, 0.2, 1) so that it&#39;s mostly flat.</li>
+                <li>Create a new sphere and call it &#39;PoopSpot&#39;.</li>
+                <li>We are going to use these to look like the little black spots in bird poop, so we need these spheres
+                    to be black - you can either make a new material for them, or use an existing material.</li>
+                <li>Once the sphere is black, make it a child of the &#39;SquishedPoop&#39;</li>
+                <li>Move and scale it to look like a lump in the squished white sphere.<ul>
+                        <li>You can type in number, or you can swap to the scale tool (press &#39;R&#39; or click on the
+                            icon). Then you can click on the middle (grey) cube to scale the object evenly in all
+                            directions.</li>
+                    </ul>
+                </li>
+                <li>DELETE the collider from this sphere too.</li>
+                <li>Duplicate the poop spot, then move and scale it to look like a different black spot.</li>
+                <li>You may want to look up bird poop so you can accurately re-create the look!</li>
+            </ul>
+            <p>We can use this new the poop to splat on the ground. A common trick to create effects like this is to
+                delete the moving object and create a new object in the same place. This is often done with bullets and
+                the bullet-holes that appear where they land, or missiles and explosions, or enemies and their dying
+                effects.</p>
+            <ul>
+                <li>Create a folder for scripts to go in called &#39;Scripts&#39; (right-click-&gt;Create-&gt;New
+                    Folder).</li>
+                <li>Create a new script called &#39;Poop&#39; in the scripts folder.</li>
+                <li>Create a variable &#39;public GameObject squishedVersion;&#39;</li>
+                <li>In the script, add an &#39;OnCollisionEnter&#39; event. If you have intellisense on it will
+                    automatically fix the function, otherwise copy the code below.</li>
+                <li>In the event, use the &#39;instantiate&#39; function to create a copy of the squished version with
+                    the current poops position and rotation.</li>
+                <li>Then destroy the current poop.</li>
+            </ul>
+            <p>The &#39;Poop&#39; code should look like this:</p>
+            <pre><code class="lang-C#"><span class="hljs-keyword">public</span> GameObject squishedVersion;
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnCollisionEnter</span><span class="hljs-params">(Collision collision)</span>
+</span>{
+    Instantiate(squishedVersion, transform.position, transform.rotation);
+    Destroy(gameObject);
+}
+</code></pre>
+            <p>Make the poop fall and splat:</p>
+            <ul>
+                <li>Add the &#39;Poop&#39; script to the falling poop.</li>
+                <li>Give the falling poop a Rigidbody and a Sphere Collider.</li>
+                <li>In the Rigidbody, change the &#39;Collision Detection&#39; to &#39;Continuous Speculative&#39; -
+                    this will make sure the poop stops exactly where it hit the ground, instead of sometimes getting
+                    stuck under it.</li>
+                <li>Make the squished poop into a prefab (create a new prefabs folder!) and delete the original.</li>
+                <li>Add the squished poop prefab into the poop script variable.</li>
+                <li>Press play on the scene - the poop should fall with a nice trail, then turn into the squished poop
+                    when it hits the ground!</li>
+            </ul>
+            <p>This isn&#39;t quite right though - the squished poop is floating above the ground! We&#39;ll need to
+                make the code a little bit more complex to fix this:</p>
+            <ul>
+                <li>Go back to the collision event in the poop script.</li>
+                <li>Before instantiating the squished version, figure out where the collision happened like this:
+                    &#39;Vector3 collisionPoint = collision.GetContact(0).point;&#39;</li>
+                <li>Now, get the poop to instantiate at this point instead: &#39;Instantiate(squishedVersion,
+                    collisionPoint, transform.rotation);&#39;</li>
+                <li>This will make the squished poop spawn touching where the falling poop touched the ground.</li>
+                <li>Test it again!</li>
+                <li>If you&#39;re happy that it&#39;s working well now, make the falling poop into a different prefab so
+                    we can make the bird spawn it later, then delete the original from the scene.</li>
+            </ul>
+            <p>The &#39;Poop&#39; code should now look like this:</p>
+            <pre><code class="lang-c#">public GameObject squishedVersion<span class="hljs-comment">;</span>
+
+private void OnCollisionEnter(Collision collision)
+{
+    Vector3 collisionPoint = collision.GetContact(<span class="hljs-number">0</span>).point<span class="hljs-comment">;</span>
+    <span class="hljs-keyword">Instantiate(squishedVersion, </span>collisionPoint, transform.rotation)<span class="hljs-comment">;</span>
+    Destroy(gameObject)<span class="hljs-comment">;</span>
+}
+</code></pre>
+            <h4 id="bird-code-">Bird Code:</h4>
+            <p>Now we want to make the bird move back and forth along the power-line, and drop a dookie every few
+                seconds.</p>
+            <ul>
+                <li>Create a new script called &#39;Bird&#39; in the scripts folder.</li>
+                <li>In the script, add these variables:<ul>
+                        <li>&#39;public float speed = 2f;&#39;</li>
+                        <li>&#39;public Transform leftPoint;&#39;</li>
+                        <li>&#39;public Transform rightPoint;&#39;</li>
+                        <li>&#39;private bool movingRight = true;&#39;</li>
+                    </ul>
+                </li>
+                <li>These will let use control where the bird can move, what direction it is moving, and how fast it
+                    moves.</li>
+                <li>In the update event, add a line to move the bird towards the right point:<ul>
+                        <li>&#39;transform.position = Vector3.MoveTowards(transform.position, rightPoint.position, speed
+                            * Time.deltaTime);&#39;</li>
+                        <li>This function works by returning a position which is where something would be if it was
+                            moving from the &#39;current&#39; position towards the &#39;target&#39; position at this
+                            speed (&#39;maxDistanceDelta&#39;).</li>
+                    </ul>
+                </li>
+                <li>This will move the bird towards the right point, but once it gets there it will just stop - we want
+                    it to move back towards the left point when it reaches the end instead.</li>
+                <li>Create an if statement &#39;if (movingRight)&#39; and put the move line inside it.</li>
+                <li>Create an &#39;else&#39; statement after it.</li>
+                <li>Copy the move function into the else statement, but change the target position to be the left point
+                    instead of the right point.</li>
+                <li>Now we need to swap directions when we reach the points:</li>
+                <li>Inside the if statement, create a new if statement to check if we have reached the right point:<ul>
+                        <li>&#39;if (transform.position == rightPoint.position)&#39;</li>
+                    </ul>
+                </li>
+                <li>If we have, swap to moving left like this:<ul>
+                        <li>&#39;movingRight = false;&#39;</li>
+                    </ul>
+                </li>
+                <li>Now in the else statement part (which happens when we are moving left), do the opposite:<ul>
+                        <li>&#39;if (transform.position == leftPoint.position)&#39;</li>
+                        <li>&#39;movingRight = true;&#39;</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>The code should look like this:</p>
+            <pre><code class="lang-c#">public Transform leftPoint;
+public Transform rightPoint;
+public <span class="hljs-built_in">float</span> speed = 2f;
+
+private bool movingRight = <span class="hljs-literal">true</span>;
+
+void Update()
+{
+    <span class="hljs-keyword">if</span> (movingRight)
+    {
+        <span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span>, rightPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> == rightPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        <span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span>, leftPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> == leftPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">true</span>;
+    }
+}
+</code></pre>
+            <p>Test the code!</p>
+            <ul>
+                <li>Add the &#39;Bird&#39; script to the seagull.</li>
+                <li>Create a new object called &#39;LeftBirdPoint&#39;, and put it at the start of the power line
+                    hanging over the road.<ul>
+                        <li>Tip: to get the exact right position, you can make the object a child of the line renderer,
+                            set its position to (0, 0, 0), then make it not a child of the line.</li>
+                    </ul>
+                </li>
+                <li>Duplicate the object, call the new one &#39;RightBirdPoint&#39;, and move it to the other end of the
+                    power-line (remember that you can use the &#39;+30&#39; trick here!)</li>
+                <li>Drag the points into the variables in the bird script.<ul>
+                        <li>Note: even though we named them &#39;left&#39; and &#39;right&#39;, they don&#39;t have to
+                            be in the correct slots, because the bird will just bounce between them anyway - they&#39;re
+                            just good names that show what we&#39;re using the variables for.</li>
+                    </ul>
+                </li>
+                <li>Press play on the scene - the bird should move back and forth between the two points you set!</li>
+            </ul>
+            <h4 id="make-the-bird-poop-">Make the bird poop:</h4>
+            <p>Now we want the bird to poop every few seconds.</p>
+            <ul>
+                <li>Add some new variables to the Bird script:<ul>
+                        <li>&#39;public GameObject poopPrefab;&#39;</li>
+                        <li>&#39;public float poopDelay = 3f;&#39;</li>
+                        <li>&#39;private float nextPoop = 0f;&#39;</li>
+                    </ul>
+                </li>
+                <li>We want the bird to <em>Instantiate</em> the poop prefab whenever it has been &#39;poopDelay&#39;
+                    seconds since the &#39;lastPoop&#39;.</li>
+                <li>After the move part of the code in update, check if is time for the next poop using:<ul>
+                        <li>&#39;if (Time.time &gt;= nextPoop)&#39;</li>
+                    </ul>
+                </li>
+                <li>If it is, instantiate a new poop at the birds position:<ul>
+                        <li>&#39;Instantiate(poopPrefab, transform.position, poopPrefab.transform.rotation);&#39;</li>
+                    </ul>
+                </li>
+                <li>Now store the current time as the last time a poop was spawned:<ul>
+                        <li>&#39;lastPoop = Time.time;&#39;</li>
+                    </ul>
+                </li>
+                <li>Go into the scene view and drag the falling poop prefab into the bird script.</li>
+                <li>Press play to test if the bird is pooping and moving!</li>
+            </ul>
+
+            <p>The &#39;Bird&#39; code should look like this now:</p>
+            <pre><code class="lang-c#">public Transform leftPoint;
+public Transform rightPoint;
+public <span class="hljs-built_in">float</span> speed = 2f;
+public GameObject poopPrefab;
+public <span class="hljs-built_in">float</span> poopDelay = 3f;
+private <span class="hljs-built_in">float</span> lastPoop = <span class="hljs-number">0f</span>;
+
+private bool movingRight = <span class="hljs-literal">true</span>;
+
+void Update()
+{
+    <span class="hljs-keyword">if</span> (movingRight)
+    {
+        <span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span>, rightPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> == rightPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        <span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span>, leftPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span> == leftPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (Time.<span class="hljs-built_in">time</span> &gt;= lastPoop)
+    {
+        Instantiate(poopPrefab, <span class="hljs-built_in">transform</span>.<span class="hljs-built_in">position</span>, poopPrefab.<span class="hljs-built_in">transform</span>.rotation);
+        nextPoop = Time.<span class="hljs-built_in">time</span> + poopDelay;
+    }
+}
+</code></pre>
+            <h3 id="car-">CAR:</h3>
+            <p>Now we need to make the car that the player controls.</p>
+            <ul>
+                <li>Go into the models folder and find the &#39;Car&#39; model, then drag it into the scene.</li>
+                <li>Move it so it is on the road in between the poles and underneath the bird.</li>
+                <li>The car looks pretty bad like this, so lets fix that with some materials:<ul>
+                        <li>Create a new material for the car, and change the colour to red.<ul>
+                                <li>You don&#39;t have to make the car red, but we do want it to stand out in the scene,
+                                    so make sure it isn&#39;t the same colour as any of the other things in the scene.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Now we need the wheels to be black - just like the poop spots, we can either make a new
+                            material, or we can reuse one we already have.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>The car looks good, but now we need to make it move.</p>
+            <ul>
+                <li>Create a new script called &#39;Car&#39;.</li>
+                <li>We&#39;re going to use a very similar system to the &#39;Bird&#39; script, so add these variables
+                    again:<ul>
+                        <li>&#39;public Transform leftPoint;&#39;</li>
+                        <li>&#39;public Transform rightPoint;&#39;</li>
+                        <li>&#39;public float speed = 2f;&#39;</li>
+                    </ul>
+                </li>
+                <li>This time, instead of always moving, the car needs to only move when we press the correct button.
+                    Check if the player is pressing the Right arrowkey with this if statement:<ul>
+                        <li>&#39;if (Input.GetKey(KeyCode.RightArrow))&#39;</li>
+                    </ul>
+                </li>
+                <li>If they are, move the car towards the <em>right</em> point:<ul>
+                        <li>&#39;transform.position = Vector3.MoveTowards(transform.position, leftPoint.position, speed
+                            * Time.deltaTime);&#39;</li>
+                        <li>Note: for the car which point is in which slot <strong>does</strong> matter, because if
+                            they&#39;re wrong the car will go the wrong direction when we press the button.</li>
+                    </ul>
+                </li>
+                <li>Do the same code for the left arrow key, moving towards the left point.</li>
+            </ul>
+            <p>The &#39;Car&#39; code should look like this:</p>
+            <pre><code class="lang-c#"><span class="hljs-keyword">public</span> Transform leftPoint;
+<span class="hljs-keyword">public</span> Transform rightPoint;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> speed = <span class="hljs-number">5</span>f;
+
+<span class="hljs-comment">// Update is called once per frame</span>
+<span class="hljs-keyword">void</span> Update()
+{
+    <span class="hljs-built_in">if</span> (Input.GetKey(KeyCode.LeftArrow))
+    {
+        transform.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(transform.<span class="hljs-built_in">position</span>, leftPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+    }
+
+    <span class="hljs-built_in">if</span> (Input.GetKey(KeyCode.RightArrow))
+    {
+        transform.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(transform.<span class="hljs-built_in">position</span>, rightPoint.<span class="hljs-built_in">position</span>, speed * Time.deltaTime);
+    }
+}
+</code></pre>
+            <p>Now set up the points for the car to move between:</p>
+            <ul>
+                <li>Duplicate the two bird points.</li>
+                <li>Change their names to &#39;LeftCarPoint&#39; and &#39;RightCarPoint&#39;.</li>
+                <li>Move them down to be on the road (the easy way is to set the y value to 0).</li>
+                <li>Drag each point into the right slot on the car script (make sure they match up correctly!)</li>
+                <li>Test the car!</li>
+            </ul>
+            <h3 id="poop-on-the-car-">Poop on the Car:</h3>
+            <p>The car should be moving nicely between the poles now, but the poops go right through it! Lets fix that.
+            </p>
+            <ul>
+                <li>Click on the car.</li>
+                <li>Add a &#39;MeshCollider&#39; component to it.</li>
+                <li>Done! Now the poops can hit the car - but nothing happens when they do.</li>
+            </ul>
+            <h3 id="game-over-">Game Over:</h3>
+            <p>Lets make the game end if a poop lands on the car. If you did the sumo game, this will be familiar to
+                you, but there&#39;s one thing that will need to be different. Since the poop is the thing that checks
+                for collisions and knows when the game should end, we can&#39;t just put a reference to a gameover
+                screen in the script, because the poop gets created during the game.</p>
+            <h4 id="singleton-gameovermanager-script-">Singleton GameOverManager Script:</h4>
+            <p>A nice easy way to deal with this is by using a <strong>singleton</strong>. This is when we put a
+                reference to a specific object into a static variable, because static variables can be accessed easily
+                from any script. They are called singletons because there will be problems if you have more or less than
+                a <em>single</em> copy of the specific object.</p>
+            <ul>
+                <li>Create a new script called &#39;GameOverManager&#39; in the scripts folder.</li>
+                <li>Create a static singleton variable like this:<ul>
+                        <li>&#39;public static GameOverManager singleton;&#39;</li>
+                    </ul>
+                </li>
+                <li>In the start event, make the singleton point at this specific script component:<ul>
+                        <li>&#39;singleton = this;&#39;</li>
+                    </ul>
+                </li>
+                <li>Because we need this script to run on start we can&#39;t turn the gameObject with the script on and
+                    off to hide the panel - so we&#39;ll need a reference to a separate one:<ul>
+                        <li>&#39;public GameObject gameOverPanel;&#39;</li>
+                    </ul>
+                </li>
+                <li>Now make the functions that we&#39;re going to call using this script - GameOver and Restart:</li>
+                <li>Create a GameOver function:<ul>
+                        <li>&#39;public void GameOver()&#39;</li>
+                    </ul>
+                </li>
+                <li>Inside this function, enable the gameover screen:<ul>
+                        <li>&#39;gameOverPanel.SetActive(true);&#39;</li>
+                    </ul>
+                </li>
+                <li>Then also set the time scale of the scene to 0. This will freeze time and stop the player from
+                    moving and the bird from infinitely making more poops.<ul>
+                        <li>&#39;Time.timeScale = 0;&#39;</li>
+                    </ul>
+                </li>
+                <li>Create a Restart function:<ul>
+                        <li>&#39;public void RestartGame()&#39;</li>
+                    </ul>
+                </li>
+                <li>Set the time scale back to 1, or everything will be frozen when we restart:<ul>
+                        <li>&#39;Time.timeScale = 1;&#39;</li>
+                    </ul>
+                </li>
+                <li>Allow the script to reload the scene by adding this <em>outside</em> the script:<ul>
+                        <li>&#39;using UnityEngine.SceneManagement;&#39;</li>
+                    </ul>
+                </li>
+                <li>Back in the RestartGame function, load the scene:<ul>
+                        <li>&#39;SceneManager.LoadScene(SceneManager.GetActiveScene().name);&#39;</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>The GameOverManager code should look like this:</p>
+            <pre><code class="lang-c#">...
+<span class="hljs-keyword">using</span> UnityEngine.SceneManagement;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameOverManager</span> : <span class="hljs-title">MonoBehaviour</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> GameOverManager singleton;
+    <span class="hljs-keyword">public</span> GameObject gameOverPanel;
+
+    <span class="hljs-comment">// Start is called before the first frame update</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>(<span class="hljs-params"></span>)
+    </span>{
+        singleton = <span class="hljs-keyword">this</span>;
+        gameOverPanel.SetActive(<span class="hljs-literal">false</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">GameOver</span>(<span class="hljs-params"></span>)
+    </span>{
+        gameOverPanel.SetActive(<span class="hljs-literal">true</span>);
+        Time.timeScale = <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RestartGame</span>(<span class="hljs-params"></span>)
+    </span>{
+        Time.timeScale = <span class="hljs-number">1</span>;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
+</code></pre>
+            <p>Now we need to trigger this code when the poops hit the car, but not when they hit the ground:</p>
+            <ul>
+                <li>Make a new tag called &#39;Car&#39;.<ul>
+                        <li>Click on the car.</li>
+                        <li>Underneath the name, it says &#39;Tag &#39;Untagged&#39;&#39;</li>
+                        <li>Click on untagged to show the dropdown, then click &#39;Add Tag&#39;.</li>
+                        <li>Click on the little plus icon under the Tags list.</li>
+                        <li>Type &#39;Car&#39;.</li>
+                        <li>Click Save.</li>
+                    </ul>
+                </li>
+                <li>
+                    <p>Assign the Car tag to the Car.</p>
+                    <ul>
+                        <li>Click on the car.</li>
+                        <li>Click on the tag dropdown.</li>
+                        <li>Select &#39;Car&#39;.</li>
+                    </ul>
+                </li>
+                <li>
+                    <p>In the &#39;Poop&#39; script, add an if statement to check if the collision was with something
+                        that has the &#39;Car&#39; tag:</p>
+                    <ul>
+                        <li>&#39;if (collision.collider.CompareTag(&quot;Car&quot;))&#39;</li>
+                    </ul>
+                </li>
+                <li>If it is, call the gameover function in the GameOverManager like this:<ul>
+                        <li>&#39;GameOverManager.singleton.GameOver();&#39;</li>
+                        <li><u>Explanation</u>: From the &#39;GameOverManager&#39; class we are getting the static
+                            variable &#39;singleton&#39; (static variables are variables that are on the object type,
+                            not on each object separately), then since the singleton is a reference to an actual
+                            component, we can use that to call the &#39;GameOver()&#39; function.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>The new Poop script looks like this:</p>
+            <pre><code class="lang-c#">public GameObject squishedVersion<span class="hljs-comment">;</span>
+
+private void OnCollisionEnter(Collision collision)
+{
+    if (collision.collider.CompareTag(<span class="hljs-string">"Car"</span>))
+        GameOverManager.singleton.GameOver()<span class="hljs-comment">;</span>
+
+    Vector3 collisionPoint = collision.GetContact(<span class="hljs-number">0</span>).point<span class="hljs-comment">;</span>
+    <span class="hljs-keyword">Instantiate(squishedVersion, </span>collisionPoint, transform.rotation)<span class="hljs-comment">;</span>
+    Destroy(gameObject)<span class="hljs-comment">;</span>
+}
+</code></pre>
+            <h4 id="gameover-screen-">Gameover Screen:</h4>
+            <p>Now we need to set up the game over screen that shows when the game ends, as well as a restart button.
+            </p>
+            <ul>
+                <li>Create a new GameObject and call it &#39;GameOverManager&#39;.</li>
+                <li>
+                    <p>Give it the &#39;GameOverManager&#39; script.</p>
+                </li>
+                <li>
+                    <p>In the scene, add a UI panel (GameObject&gt;UI&gt;Panel), and call it &#39;GameOverPanel&#39;.
+                    </p>
+                </li>
+                <li>To make editing UI elements easier, change to &#39;2D&#39; mode in the scene view, and then either
+                    scroll out or press &quot;F&quot; when one of the elements is selected, so that you can see the
+                    canvas.</li>
+                <li>Create two text boxes and make them children of the panel.<ul>
+                        <li>You will need to import &#39;Text Mesh Pro&#39; for these.</li>
+                    </ul>
+                </li>
+                <li>Call the first text box &#39;GameOverTitle&#39;, and put it near the top of the screen.</li>
+                <li>Change the text in it to something like &#39;GAME OVER!&#39;.</li>
+                <li>Make the text font be larger (e.g. 50), and change the width and height of the rect transform so
+                    that the text fits in it.</li>
+                <li>Call the second text box &#39;GameOverDescription&#39;, and put it underneath the gameover title.
+                </li>
+                <li>Change the text to tell the player that they lost, and make sure the box is big enough again.</li>
+                <li><u>Design decision</u> - What should the text boxes say? Encourage the student to decide for
+                    themselves. If they want them to be centered, they can change the text alignment, and set the x
+                    position to 0.</li>
+                <li><u>Explanation</u> - The canvas is only used for UI elements, which need a
+                        &#39;RectTransform&#39; instead of a normal transform. They go on top of other things on the
+                        screen, and the changes shape to fit onto the screen.
+                </li>
+                <li>Create a UI button, call it &#39;RestartButton&#39;, and put it underneath the other text.
+                </li>
+                <li>In the &#39;Button&#39; component, add a function to the &#39;OnClick&#39; event (click the plus at
+                    the bottom of the box).</li>
+                <li>Drag the &#39;GameOverManager&#39; object into the object field.</li>
+                <li>Change the function to &#39;RestartGame&#39; (click the &#39;No Function&#39; dropdown, select
+                    &#39;GameOverManager&#39;, then select &#39;RestartGame&#39;).</li>
+                <li>The button will have a child text object - change the text in this to &#39;Restart&#39;.</li>
+                <li>Deactivate the GameoverPanel (uncheck the tickbox at the top) - we only want it to be visible when
+                    the player loses the game.</li>
+            </ul>
+            <p>The project is now finished!</p>
+            <h3 id="bonus-activities-">Bonus Activities!</h3>
+            <h4 id="sounds-">Sounds:</h4>
+            <p>Games are better with sounds, so lets add some to Dookie Dodger. We&#39;re going to need a sound for the
+                car, the bird pooping, the poop hitting the ground, and for the poop hitting the car (or the player
+                losing). After that we can also add music to the background.</p>
+            <h4 id="custom-sounds-">Custom sounds:</h4>
+            <ul>
+                <li>If you want to and you are able to, you can record or find the sounds yourself! (but make sure you
+                    aren&#39;t distracting the people around you.)</li>
+                <li>When you have the sounds ready, go into the &#39;Sounds&#39; folder in unity, and create a new
+                    folder called &#39;Custom&#39; - then copy the sounds into this folder.</li>
+            </ul>
+            <p>If you&#39;re not making custom sounds, you can use the sounds in the &#39;Original&#39; folder instead.
+            </p>
+            <h4 id="car-sounds">Car:</h4>
+            <p>Lets start with the car sounds:</p>
+            <ul>
+                <li>Select the car object.</li>
+                <li>Add an &#39;AudioSource&#39; component to the car.<ul>
+                        <li>Sounds in unity require three things to work - a sound (called an &#39;AudioClip&#39;), a
+                            component to play the sound (called an &#39;AudioSource&#39;), and a component to detect the
+                            sounds that should be playing (called an &#39;AudioListener&#39;). The
+                            &#39;AudioListener&#39; should already be on the camera.</li>
+                        <li>Unity needs AudioListeners in order to do realistic 3D sounds that are quiet when you&#39;re
+                            far away from them - but we won&#39;t be using these features in this project since the
+                            camera and the player are always in the same place.</li>
+                    </ul>
+                </li>
+                <li>Drag the &#39;CarEngine&#39; sound into the &#39;AudioClip&#39; variable on the AudioSource (you
+                    could also click on the slot and select one, but this can be hard if you have lots of sounds).</li>
+                <li>Test the scene!</li>
+            </ul>
+            <p>The sound should be playing, and it should sound pretty good - except that it stops after the sound is
+                finished - we want it to keep playing instead.</p>
+            <ul>
+                <li>In the AudioSource component, tick the &#39;Loop&#39; setting. This will make the sound play again
+                    when it finishes.</li>
+                <li>Test it again!</li>
+            </ul>
+            <h4 id="bird-pooping-">Bird (Pooping):</h4>
+            <p>Next we want to add the pooping sound:</p>
+            <ul>
+                <li>Select the Seagull object.</li>
+                <li>Add an AudioSource component to it as well.</li>
+                <li>Choose a Pooping sound for the Seagull, and drag it into the AudioClip variable.</li>
+                <li>We want this sound to only play when the bird poops, so we need to stop it automatically playing
+                    when the game starts - to do this, uncheck the &#39;Play on Awake&#39; button in the AudioSource.
+                </li>
+            </ul>
+            <p>Now we need to tell the sound to play when the bird poops.</p>
+            <ul>
+                <li>Open the &#39;Bird&#39; script.</li>
+                <li>Go to the part of the code that Instantiates the poop and add this line after it:<ul>
+                        <li>&#39;GetComponent&lt;AudioSource&gt;().Play();&#39;</li>
+                    </ul>
+                </li>
+                <li>That&#39;s it - test the pooping sound!</li>
+            </ul>
+            <h4 id="poop-landing-">Poop Landing:</h4>
+            <p>We can now do the same thing for the poop landing.</p>
+            <ul>
+                <li>Select the &#39;SquishedPoop&#39; prefab.</li>
+                <li>Add an AudioSource to it.</li>
+                <li>Choose a sound for the poop hitting the ground, and drag it into the &#39;AudioClip&#39; variable.
+                </li>
+                <li>Make sure &#39;Play on Awake&#39; is ON.</li>
+                <li>Test it!</li>
+            </ul>
+            <p>Since this prefab gets created when the falling poop hits the ground, we can just make it play the sound
+                right away and it will work without any script changes.</p>
+            <h4 id="game-over-sounds">Game Over:</h4>
+            <p>The last sound we want to add is for when when a poop hits the car and the player loses. We could make
+                the falling poop play it when it hits the car, but it makes a bit more sense to have the
+                &#39;GameOverManager&#39; play the game over sound - since it is in charge of the game ending.</p>
+            <ul>
+                <li>Select the GameOverManager object.</li>
+                <li>Add an AudioSource to it.</li>
+                <li>Choose the game over sound and drag it into the &#39;AudioClip&#39; variable.</li>
+                <li>
+                    <p>Make sure &#39;Play on Awake&#39; is turned off.</p>
+                </li>
+                <li>
+                    <p>Go into the &#39;GameOverManager&#39; script.</p>
+                </li>
+                <li>In the &#39;GameOver()&#39; function, add a line of code at the start to play the sound just like in
+                    the bird:<ul>
+                        <li>&#39;GetComponent&lt;AudioSource&gt;().Play();&#39;</li>
+                    </ul>
+                </li>
+                <li>Done!</li>
+            </ul>
+            <h4 id="random-sounds-">Random Sounds:</h4>
+            <p>When exactly the same sound is playing regularly in a game it can often start to get annoying and sound
+                very fake and distracting, so game developers often use some simple tricks to help fix that - randomly
+                choosing between a few different sounds, and changing the pitch of the sound a little bit so it
+                doesn&#39;t sound exactly the same.
+                Lets do these for the bird, since it makes sounds quite often:</p>
+            <ul>
+                <li>In the &#39;Bird&#39; script, add this line before the line where we play the poop sound:<ul>
+                        <li>&#39;GetComponent&lt;AudioSource&gt;().pitch = Random.Range(0.8f, 1.2f);&#39;</li>
+                    </ul>
+                </li>
+                <li>
+                    <p>Save it and test the new sounds - they should be a tiny bit different each time.</p>
+                </li>
+                <li>
+                    <p>Add a new variable to the &#39;Bird&#39; script:</p>
+                    <ul>
+                        <li>&#39;public List&lt;AudioClip&gt; randomPoopSounds;&#39;</li>
+                    </ul>
+                </li>
+                <li>Just after the random pitch line, add this code:<ul>
+                        <li>&#39;int randomSoundNumber = Random.Range(0, randomPoopSounds.Count);&#39;</li>
+                        <li>&#39;GetComponent&lt;AudioSource&gt;().clip = randomPoopSounds[randomSoundNumber];&#39;</li>
+                        <li>This will change the clip in the audio source to a random one from the list.</li>
+                    </ul>
+                </li>
+                <li>In the scene view, select the Seagull and drag all of the sounds that would be good for it pooping
+                    into the new list.</li>
+                <li>This should be working now, and you can test it, but we&#39;ll make a few more changes to make our
+                    code better.</li>
+            </ul>
+            <pre><code class="lang-c#">...
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">Time</span>.<span class="hljs-built_in">time</span> &gt;= nextPoop)
+{
+    Instantiate(poopPrefab, transform.<span class="hljs-built_in">position</span>, poopPrefab.transform.rotation);
+    nextPoop = <span class="hljs-built_in">Time</span>.<span class="hljs-built_in">time</span> + poopDelay;
+
+    GetComponent&lt;AudioSource&gt;().<span class="hljs-built_in">pitch</span> = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0.8</span>f, <span class="hljs-number">1.2</span>f);
+
+    int randomSoundNumber = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0</span>, randomPoopSounds.<span class="hljs-built_in">Count</span>);
+    GetComponent&lt;AudioSource&gt;().clip = randomPoopSounds[randomSoundNumber];
+
+    GetComponent&lt;AudioSource&gt;().Play();
+}
+</code></pre>
+            <p>The &#39;GetComponent&#39; function is useful, but using it too often can make our game run slowly, and
+                it&#39;s also quite long - so since we have a lot of code doing things to the same component let&#39;s
+                save it to a variable so we only have to do it once:</p>
+            <pre><code class="lang-c#">...
+
+if (Time.time &gt;= nextPoop)
+{
+    <span class="hljs-keyword">Instantiate(poopPrefab, </span>transform.position, poopPrefab.transform.rotation)<span class="hljs-comment">;</span>
+    nextPoop = Time.time + poopDelay<span class="hljs-comment">;</span>
+
+    AudioSource audioSource = GetComponent&lt;AudioSource&gt;()<span class="hljs-comment">;</span>
+    audioSource.pitch = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0</span>.<span class="hljs-number">8</span>f, <span class="hljs-number">1</span>.<span class="hljs-number">2</span>f)<span class="hljs-comment">;</span>
+
+    int randomSoundNumber = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0</span>, randomPoopSounds.Count)<span class="hljs-comment">;</span>
+    audioSource.clip = randomPoopSounds[randomSoundNumber]<span class="hljs-comment">;</span>
+
+    audioSource.Play()<span class="hljs-comment">;</span>
+}
+</code></pre>
+            <p>Much better - now you could try doing one or both of these tricks for the poops landing, since that sound
+                also plays very often.</p>
+            <h3 id="unpredictable-bird-">Unpredictable Bird:</h3>
+            <p>Let&#39;s make the bird poop randomly so that the game is a bit harder.</p>
+            <ul>
+                <li>Go into the &#39;Bird&#39; script.</li>
+                <li>Add these variables:<ul>
+                        <li>&#39;public float randomDelay = 1f;&#39;</li>
+                        <li>&#39;public float changeDirectionChance = 0.4f;&#39;</li>
+                    </ul>
+                </li>
+                <li>Now we can use these to change how often the bird poops:</li>
+                <li>Go back to the code where the poop is created and add this to the line that sets when the next poop
+                    will happen:<ul>
+                        <li>&#39;nextPoop = Time.time + poopDelay + Random.Range(-randomDelay, randomDelay);&#39;</li>
+                    </ul>
+                </li>
+                <li>This will make the bird poop at a random interval.</li>
+                <li>In the scene view, go to the bird component and change the poopDelay to be smaller (e.g. 2 instead
+                    of 3), since we&#39;re randomly adding some time to it now.</li>
+            </ul>
+            <p>Now lets make the bird sometimes change direction.</p>
+            <ul>
+                <li>At the end of the pooping code (after the sound is played), add an if statement that triggers
+                    randomly based on the variable we made, like this:<ul>
+                        <li>&#39;if (Random.value &lt;= changeDirectionChance)&#39;</li>
+                        <li>Random.value gives us a random number between 0.0 and 1.0, for example &#39;0.73826849&#39;.
+                            We can compare this number to a variable to decide how often the effect happens - so if we
+                            want it to happen a lot we can set our variable to 0.9, and if we want it only occasionally
+                            we can set it to 0.1.</li>
+                    </ul>
+                </li>
+                <li>Inside the if statement, swap the direction that the bird is moving like this:<ul>
+                        <li>&#39;movingRight = !movingRight;&#39;</li>
+                        <li>The &#39;!&#39; means &#39;the opposite of&#39; or &#39;not&#39; - so we&#39;re setting the
+                            value to the opposite of itself.</li>
+                    </ul>
+                </li>
+                <li>Test it!</li>
+            </ul>
+            <p>The full &#39;Bird&#39; code should now look like this:</p>
+            <pre><code class="lang-c#">
+public Transform leftPoint;
+public Transform rightPoint;
+public float <span class="hljs-built_in">speed</span> = <span class="hljs-number">2</span>f;
+public GameObject poopPrefab;
+public float poopDelay = <span class="hljs-number">2</span>f;
+public float randomDelay = <span class="hljs-number">0.5</span>f;
+public float changeDirectionChance = <span class="hljs-number">0.4</span>f;
+
+public <span class="hljs-built_in">List</span>&lt;AudioClip&gt; randomPoopSounds;
+
+<span class="hljs-built_in">private</span> float nextPoop = <span class="hljs-number">0</span>f;
+<span class="hljs-built_in">private</span> bool movingRight = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// Update is called once per frame</span>
+void Update()
+{
+    <span class="hljs-keyword">if</span> (movingRight)
+    {
+        transform.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(transform.<span class="hljs-built_in">position</span>, rightPoint.<span class="hljs-built_in">position</span>, <span class="hljs-built_in">speed</span> * <span class="hljs-built_in">Time</span>.deltaTime);
+        <span class="hljs-keyword">if</span> (transform.<span class="hljs-built_in">position</span> == rightPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        transform.<span class="hljs-built_in">position</span> = Vector3.MoveTowards(transform.<span class="hljs-built_in">position</span>, leftPoint.<span class="hljs-built_in">position</span>, <span class="hljs-built_in">speed</span> * <span class="hljs-built_in">Time</span>.deltaTime);
+        <span class="hljs-keyword">if</span> (transform.<span class="hljs-built_in">position</span> == leftPoint.<span class="hljs-built_in">position</span>)
+            movingRight = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Time</span>.<span class="hljs-built_in">time</span> &gt;= nextPoop)
+    {
+        Instantiate(poopPrefab, transform.<span class="hljs-built_in">position</span>, poopPrefab.transform.rotation);
+        nextPoop = <span class="hljs-built_in">Time</span>.<span class="hljs-built_in">time</span> + poopDelay + <span class="hljs-built_in">Random</span>.Range(-randomDelay, randomDelay);
+        AudioSource audioSource = GetComponent&lt;AudioSource&gt;();
+        audioSource.<span class="hljs-built_in">pitch</span> = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0.8</span>f, <span class="hljs-number">1.2</span>f);
+        int randomSoundNumber = <span class="hljs-built_in">Random</span>.Range(<span class="hljs-number">0</span>, randomPoopSounds.<span class="hljs-built_in">Count</span>);
+        audioSource.clip = randomPoopSounds[randomSoundNumber];
+        audioSource.Play();
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Random</span>.value &lt;= changeDirectionChance)
+            movingRight = !movingRight;
+    }
+}
+</code></pre>
+            <p>The game is still a little too easy, so try duplicating the bird so there are two of them at once!</p>
+
+
+
+        </div>
+    </article>
+
+    <footer>
+        <ul id="copyright">
+            <p>&copy; 2026 Jacob Scott. All rights reserved.</p>
+            <p>Design Source: <a href="http://html5up.net">HTML5 UP</a></p>
+        </ul>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
