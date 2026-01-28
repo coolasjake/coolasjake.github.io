@@ -615,17 +615,15 @@ void Update()
                         <li>Click Save.</li>
                     </ul>
                 </li>
-                <li>
-                    <p>Assign the Car tag to the Car.</p>
+                <li>Assign the Car tag to the Car.
                     <ul>
                         <li>Click on the car.</li>
                         <li>Click on the tag dropdown.</li>
                         <li>Select &#39;Car&#39;.</li>
                     </ul>
                 </li>
-                <li>
-                    <p>In the &#39;Poop&#39; script, add an if statement to check if the collision was with something
-                        that has the &#39;Car&#39; tag:</p>
+                <li>In the &#39;Poop&#39; script, add an if statement to check if the collision was with something
+                        that has the &#39;Car&#39; tag:
                     <ul>
                         <li>&#39;if (collision.collider.CompareTag(&quot;Car&quot;))&#39;</li>
                     </ul>
@@ -657,13 +655,8 @@ private void OnCollisionEnter(Collision collision)
             </p>
             <ul>
                 <li>Create a new GameObject and call it &#39;GameOverManager&#39;.</li>
-                <li>
-                    <p>Give it the &#39;GameOverManager&#39; script.</p>
-                </li>
-                <li>
-                    <p>In the scene, add a UI panel (GameObject&gt;UI&gt;Panel), and call it &#39;GameOverPanel&#39;.
-                    </p>
-                </li>
+                <li>Give it the &#39;GameOverManager&#39; script.</li>
+                <li>In the scene, add a UI panel (GameObject&gt;UI&gt;Panel), and call it &#39;GameOverPanel&#39;.</li>
                 <li>To make editing UI elements easier, change to &#39;2D&#39; mode in the scene view, and then either
                     scroll out or press &quot;F&quot; when one of the elements is selected, so that you can see the
                     canvas.</li>
@@ -775,12 +768,8 @@ private void OnCollisionEnter(Collision collision)
                 <li>Select the GameOverManager object.</li>
                 <li>Add an AudioSource to it.</li>
                 <li>Choose the game over sound and drag it into the &#39;AudioClip&#39; variable.</li>
-                <li>
-                    <p>Make sure &#39;Play on Awake&#39; is turned off.</p>
-                </li>
-                <li>
-                    <p>Go into the &#39;GameOverManager&#39; script.</p>
-                </li>
+                <li>Make sure &#39;Play on Awake&#39; is turned off.</li>
+                <li>Go into the &#39;GameOverManager&#39; script.</li>
                 <li>In the &#39;GameOver()&#39; function, add a line of code at the start to play the sound just like in
                     the bird:<ul>
                         <li>&#39;GetComponent&lt;AudioSource&gt;().Play();&#39;</li>
@@ -799,11 +788,8 @@ private void OnCollisionEnter(Collision collision)
                         <li>&#39;GetComponent&lt;AudioSource&gt;().pitch = Random.Range(0.8f, 1.2f);&#39;</li>
                     </ul>
                 </li>
-                <li>
-                    <p>Save it and test the new sounds - they should be a tiny bit different each time.</p>
-                </li>
-                <li>
-                    <p>Add a new variable to the &#39;Bird&#39; script:</p>
+                <li>Save it and test the new sounds - they should be a tiny bit different each time.</li>
+                <li>Add a new variable to the &#39;Bird&#39; script:
                     <ul>
                         <li>&#39;public List&lt;AudioClip&gt; randomPoopSounds;&#39;</li>
                     </ul>
