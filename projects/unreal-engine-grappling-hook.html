@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Dookie Dodger Unity Game</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/tutorials.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Home</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <h1 id="title">Grappling Hook</h1>
+            <h4 class="subtitle">Unreal Engine Tutorial</h4>
+            <p></p>
+            <p></p>
+            <p>In a previous tutorial I talked about how to make a physics based grappling hook in Unity. This tutorial
+                is a more in-depth look at how to do the same thing in Unreal Engine, with some more experiments and
+                some comments on what parts were the same or different.</p>
+
+            <img class="main-img" src="./images/GH01_Grappling.gif" alt="" />
+
+            <h2 id="intro">Introduction</h2>
+            <p>There are two ways grappling hooks (or webs) typically work in games: 1) by pulling the player directly
+                to the target, or 2) by swinging a falling player around the grappled point in a pendulum motion.</p>
+            <p>In this tutorial we will make the pendulum version of a grappling hook, so that players can swing around
+                obstacles, and in the future I will add extra systems for retracting or accelerating.</p>
+
+
+            <h2 id="theory">Theory</h2>
+
+            <h4 id="physics">Physics</h4>
+            <p>Lets go over the physics of a grappling hook.</p>
+            <p>The main component of a grappling hook is the pendulum motion. A real pendulum has very simple forces
+                acting on it: Gravity pulling it down, and the rope pulling it towards the pivot point.</p>
+            <p>The reason the pendulum swings back and forth is because the rope applies its force based on the position
+                and velocity of the object. When the object first starts falling the rope applies a small force towards
+                the middle while gravity accelerates it downwards. When the object is near the bottom the rope applies a
+                medium force up, countering gravity but not effecting its sideways momentum. When the object has gone
+                past the center it has a lot of velocity away from the pivot, so the rope pulls it up and back to the
+                middle with a lot of force, causing it to curve upwards and towards the middle. Finally, when the object
+                is mostly going up the rope doesn&#39;t apply much force to it, letting gravity decelerate it until it
+                stops and the cycle starts again.</p>
+
+            <img class="main-img" src="./images/GH02_Diagram.png" alt="" />
+
+            <p>This means what we need to simulate from the rope is a force towards the pivot based on
+                how much the object is moving away from it. The final implementation is quite simple, but this result
+                came from testing a lot of different options and and fixing many different problems.</p>
+
+            <h4 id="maths">Maths</h4>
+            <p>Saying that the force is based on the velocity is well and good, but how exactly do we turn that idea
+                into the directions and values that we use to move the player? There are many different formulas used to
+                calculate different parts of pendulum motion, but I want my system to be robust to things like
+                collisions, strange gameplay forces or even changing gravity, so I don&#39;t want to use the ones that
+                assume any part of the setup (like where gravity is coming from) or that calculate a position instead of
+                the forces or velocity (as this would lead to clipping into objects).</p>
+            <p>The truly realistic way to calculate the forces is to determine how much the rope is being stretched at
+                each point in time, and apply a spring force to &#39;restore&#39; it. The main difficulty of this
+                approach is stopping the player from bouncing and oscillating like they&#39;re on an elastic band -
+                which can be made worse because of the large discrete steps of a physics engine.</p>
+
+
+            <h2 id="implementation">Implementation</h2>
+
+            <h4 id="attaching-the-hook">Attaching the Hook</h4>
+            <p>Before we can calculate and apply forces to the player, we need a way for them to choose a point and
+                attach the grappling hook to it.</p>
+            <p>First set up an InputAction for the button used to grapple:</p>
+            <ul>
+                <li>Create an input action and name it something descriptive like &#39;Grapple&#39;.</li>
+                <li>Find and open the Input Mapping Context object (e.g. IMC_Default in the first person project).</li>
+                <li>Add the new input action to the mapping list, and add a control mapping for the button you want to
+                    trigger it.</li>
+                <li>In the main EventGraph for your character, create an Enhanced Action Event for the new IA you just
+                    made - this will let you trigger code when you press the grapple button.</li>
+            </ul>
+
+            <img class="main-img" src="./images/GH03_InputActions.png" alt="" />
+
+            <p>Like most games we&#39;re going to get the grappling point based on where the player is aiming, and fail
+                to grapple if there is nothing near enough. Just like in Unity we can draw a line from the camera and
+                save the first point we hit as our target, which in Unreal Engine is called a Line Trace. This function
+                only takes the start and end points of a line, and doesn&#39;t have options to take a direction and max
+                distance directly like in Unity, so we&#39;ll have to use those values to calculate an end point
+                instead. Here we run into another noticeable difference to Unity: the default unit is cm instead of
+                meters, so my go-to big value of 100 doesn&#39;t even reach the ground from the camera!</p>
+            <p>Get a grapple point when pressing the grapple button:</p>
+            <ul>
+                <li>Create a Line Trace node coming from the &#39;Triggered&#39; pin of the new Action Event.</li>
+                <li>Get the world location of the camera, and connect it to the &#39;Start&#39; pin.</li>
+                <li>Get the forwards vector of the camera (Camera -&gt; Get World Rotation -&gt; Get Forward Vector),
+                    and multiply it by the maximum grappling distance. Remember the units are in cm so the value should
+                    be really big!</li>
+                <li>Add the new value to the camera location, and connect the result to the &#39;End&#39; pin of the
+                    Line Trace node.</li>
+                <li>The object types pin needs an array of types the line trace is allowed to collide with - I used
+                    &#39;WorldDynamic&#39;, &#39;WorldStatic&#39; and &#39;PhysicsBody&#39; to include basically every
+                    object.</li>
+                <li>Set a boolean (e.g. &#39;Has Target&#39;) to the return value of the Line Trace, then create a
+                    branch with the return value as its condition.</li>
+                <li>From the &#39;True&#39; line of the branch, break the &#39;Out Hit&#39; pin and use the
+                    &#39;Location&#39; pin to save the grappling hook point in a variable (e.g. &#39;Grapple
+                    Point&#39;).</li>
+                <li>Save the &#39;Distance&#39; value from the same hit result to a different variable (e.g. &#39;Rope
+                    Length&#39;), so we know how long the rope is meant to be.</li>
+                <li>Optional: To make sure it&#39;s working, draw a debug sphere at the location after setting it - if
+                    you can&#39;t see it you might have missed a step.
+                </li>
+            </ul>
+
+            <img class="main-img" src="./images/GH04_GetGrapplePoint.png" alt="" />
+
+            <h4 id="forces">Forces</h4>
+            <p>Now that we&#39;ve attached the hook, we need to actually apply the forces to the player. Before we do
+                that we need change some of the settings on the player character to let it use more realistic physics.
+            </p>
+            <p>Changes:</p>
+            <ul>
+                <li>Turn on &#39;Simulate Physics&#39; in the &#39;Physics&#39; section of the Character Blueprint
+                    settings.</li>
+                <li>Change &#39;Braking Deceleration Falling&#39; to 0 in the &#39;Character Movement:
+                    Jumping/Falling&#39; section.</li>
+            </ul>
+            <p>Now the broad strokes of the grappling hook system:</p>
+            <ul>
+                <li>When the Input Action is &#39;triggered&#39; (not shown in the), find a grapple point.</li>
+                <li>Do nothing if no target was found.</li>
+                <li>Optional: Pre-calculate the vector between the rope and the player.</li>
+                <li>Check if the player is past the maximum length of the rope and moving away from the pivot. If either
+                    are false, cancel adding forces.</li>
+                <li>Calculate and apply the tension force.</li>
+            </ul>
+            <p>Most of these steps are simple, but using dot products to check if the player is moving towards or away
+                is a little tricky if you&#39;ve never used them before.</p>
+            <p>The dot product function is a simple but very useful maths function. For this situation we need to give
+                the function normalized vectors (aka &#39;directions&#39;) - because when we do that the result is a
+                number between 1 and -1 representing how similar the two directions are, with 1 being the same, -1 being
+                opposites and 0 meaning they are at right angles.</p>
+            <p>This is how we check if the velocity is towards or away from the grapple point - by checking if the
+                result of the dot product is greater than 0 or not.</p>
+
+            <img class="main-img" src="./images/GH05_SwingConditions.png" alt="" />
+
+            <h4 id="tension-force">Tension force</h4>
+            <p>Now we just need to calculate the actual force the rope applies on the player. This is done by figuring
+                out how much the rope has been extended past its maximum length, and applying that value with no changes
+                as a force towards the grapple point!</p>
+            <p>Steps:</p>
+            <ul>
+                <li>Calculate how much further the player is from the maximum length of the rope.</li>
+                <li>Apply a force towards the pivot point equal to that value (normalize the rope vector, negate it then
+                    multiply it by the extra rope length).</li>
+                <li>Done!</li>
+            </ul>
+
+            <img class="main-img" src="./images/GH06_TensionForce.png" alt="" />
+
+            <p>This gives a smooth and robust swing with a lot less effort than my unity version.</p>
+
+            <h4 id="old-solution">Old solution</h4>
+            <p>In Unity the simple tension approach is a lot less intuitive, partly because the force units are
+                different from the distance/velocity units - and this is why I came up with an implementation that used
+                the players velocity to calculate the force to apply. This version works well, but is more complicated
+                and has a small but noticeable problem - that the current solution was meant to be a band-aid solution
+                for!</p>
+            <p>Velocity method:</p>
+            <ul>
+                <li>Determine how much of the velocity is parallel to rope using dot product.</li>
+                <li>Multiply the magnitude of the original velocity by the result to get how much force we need to
+                    apply.</li>
+                <li>Multiply the rope direction (the normalized rope vector) by the force value, then negate it so the
+                    force is towards the pivot instead of away, and apply the result to the player.</li>
+            </ul>
+            <p>Unfortunately this approach causes what I call &#39;gravity leak&#39;: While the player is hanging from
+                something they slowly start drifting downwards. This happens because of the order of different parts of
+                the physics calculations. First the code we wrote calculates the perfect tension forces to apply to the
+                player. Then the physics engine applies gravity to the player, increasing their velocity by a tiny
+                amount. Finally the physics engine moves the player using their velocity.</p>
+            <p>This means that the player always has one frame of gravity more velocity than they should, and slowly
+                drifts towards the ground.</p>
+            <p>We could fix this by accounting for the gravity leak, but the maths is more complicated than you would
+                expect, and it turns out there was a much simpler solution that I could have used from the start!</p>
+
+
+        </div>
+    </article>
+
+    <footer>
+        <ul id="copyright">
+            <p>&copy; 2024 Jacob Scott. All rights reserved.</p>
+            <p>Design Source: <a href="http://html5up.net">HTML5 UP</a></p>
+        </ul>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,7 +1,4 @@
-* {
-}
-
-ul, li, h5, h4, h3 {
+ul, li {
     text-align: left;
     justify-content: left;
     list-style-position: inside;
@@ -26,6 +23,7 @@ ul ul {
 
 li {
     list-style-type: auto;
+	margin-right: 3%;
 }
 
 li li {
@@ -42,7 +40,8 @@ p, code {
 }
 
 p, code {
-	margin-top: 20px;
+	margin-top: 30px;
+	margin-bottom: 5px;
 }
 
 .main-img {
