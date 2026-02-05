@@ -52,6 +52,13 @@ p, code {
 .subtitle {
     text-align: center;
     justify-content: center;
+	margin-bottom: 0;
+}
+
+.date {
+    text-align: center;
+    justify-content: center;
+    margin-top: 0;
 }
 
 .container {

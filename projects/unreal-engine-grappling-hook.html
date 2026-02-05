@@ -37,6 +37,7 @@
         <div class="container">
             <h1 id="title">Grappling Hook</h1>
             <h4 class="subtitle">Unreal Engine Tutorial</h4>
+            <aside class="date">04/02/2026</aside>
             <p></p>
             <p></p>
             <p>In a previous tutorial I talked about how to make a physics based grappling hook in Unity. This tutorial
@@ -183,7 +184,9 @@
 
             <p>This gives a smooth and robust swing with a lot less effort than my unity version.</p>
 
-            <h4 id="old-solution">Old solution</h4>
+            <h2 id="theory">Grappling Hook Finished!</h2>
+
+            <h4 id="old-solution">Old Solution</h4>
             <p>In Unity the simple tension approach is a lot less intuitive, partly because the force units are
                 different from the distance/velocity units - and this is why I came up with an implementation that used
                 the players velocity to calculate the force to apply. This version works well, but is more complicated
@@ -205,7 +208,11 @@
             <p>This means that the player always has one frame of gravity more velocity than they should, and slowly
                 drifts towards the ground.</p>
             <p>We could fix this by accounting for the gravity leak, but the maths is more complicated than you would
-                expect, and it turns out there was a much simpler solution that I could have used from the start!</p>
+                expect, and the 'leak' can be caused by other things like collisions that it wouldn't accoount for. 
+                Instead I thought I should add a small force based on how much the player has drifted downwards. 
+                After I implemented this force I got curious and wondered what would happen if that was the only force 
+                applied to the player... and to my embarrassment I found that it worked exactly the same as the other 
+                system but without all the subtle problems. This is now the tension force described above.</p>
 
 
         </div>
