@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Unity vs Unreal - SFX</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/tutorials.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Home</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <h1 id="Title">Unreal Engine vs Unity</h1>
+            <h4 class="subtitle">Sound Effects</h4>
+            <aside class="date">07/02/2026</aside>
+            <p></p>
+            <p></p>
+            <p>How to add sound effects in Unreal Engine (and why it&#39;s both easier and harder than Unity).</p>
+
+            <h3 id="sounds-in-unity">Sounds in Unity</h3>
+
+            <p>In Unity sounds are played through AudioSource components placed on objects. Each sound effect is turned
+                into an AudioClip when it&#39;s imported, and an AudioSource can only have one clip at a time, meaning
+                you need multiple AudioSources to play multiple sounds (assuming you aren&#39;t using specialised
+                plugins). You also need an audio listener on the camera, and different audio mixers can be assigned to
+                each AudioSource to control volume.</p>
+            <p>My go to for managing sound in Unity is to create a Sound-Manager script that has a list of sounds it can
+                play, each with their own settings for things like volume and random pitch variation (a super useful
+                trick for making frequent sounds less repetitive). I then have one AudioSource and Sound-Manager per
+                object that can make sounds, and call simple functions in the manager from the code to automatically
+                change the clip and settings.</p>
+            <p>Some of these systems took a while to fully unpack, so I would say while creating simple sound effects in
+                Unity is quite intuitive, more complex effects basically require a custom or third-party solution.</p>
+
+            <h3 id="sounds-in-unreal-engine">Sounds in Unreal Engine</h3>
+
+            <p>Right off the bat sounds in Unreal Engine feel a bit more complex: sound files converted into &#39;sound
+                waves&#39; on import similar to Unitys clips, and another asset called a MetaSoundSource is recommended
+                to define settings for your sounds. MetaSounds in the content library are effectively blueprints
+                (prefabs) which can be used to create or setup the objects that make sounds.</p>
+            <p>Any time a sound is played in UE a MetaSoundSource needs to play it, but existing functions like
+                &#39;create/play/spawn sound&#39; can automatically create the Source for you, either from a
+                MetaSoundSource asset, or directly from a sound file. These are automatically deleted when finished (if
+                set up correctly - looping or otherwise repeating sounds should be made into components so they can be
+                managed more carefully).</p>
+            <p>MetaSoundSources have a lot more functionality and customization available than Unity AudioSources, and
+                this is both a good and a bad thing: Having full access to node-based audio generation and mixing
+                software is obviously amazing, but the process of adding simple sounds is a lot more involved (and
+                easier to make mistakes in) because of it.
+                While there are nodes for playing sound files directly as mentioned, doing so is not the intended way to
+                implement sound, and has limitations like not correctly handling loops.</p>
+
+            <h4 id="metasounds">MetaSounds</h4>
+
+            <p>MetaSounds function quite differently from anything in the standard Unity kit. Where AudioSources can
+                only have one Clip playing at a time, MetaSounds can take from multiple sound files or even
+                procedurally-generated noise, and use a huge range of options to mix them together before giving a final
+                output. They can also use input parameters to adjust sounds from code, and because of these I would say
+                they are more similar to Unitys animation system than anything else.</p>
+            <p>The minimum required to get a MetaSound working is to create a wave player node and connect the &#39;on
+                play&#39; input to the &#39;play&#39; pin, then the &#39;on finished&#39; pin to the &#39;on
+                finished&#39; output and the &#39;out mono&#39; pin to the &#39;out mono&#39; output.</p>
+            <p>While it&#39;s just a single node with common sense connections to the three pre-existing input and
+                output nodes, it&#39;s probably still more than I could have figured out without a tutorial. It&#39;s
+                also hard to know <em>why</em> each of these nodes has been connected - so let me try to explain:</p>
+            <ul>
+                <li>Input (On Play): Inputs to MetaSounds can be either events (like start or hit) or data (like speed
+                    or health) given to it from code. Events usually happen when something starts or stops. In this case
+                    the code needs to play the start of the sound file when the MetaSound is created or started.<ul>
+                        <li>Nodes like sine waves or noise functions don&#39;t need a start event because their output
+                            is independent of when they started.</li>
+                    </ul>
+                </li>
+                <li>Output (mono or stereo): Connecting something to this is the minimum needed to make a MetaSound
+                    work. It&#39;s pretty intuitive - whatever is connected to this pin is heard when the sound is
+                    played, be that a file, generated sounds, or a mix of multiple sources.</li>
+                <li>Output (Finish Event): This is an event that the MetaSound can generate, which is used mainly to
+                    destroy temporary audio sources when the sound finishes playing. Looping sounds should
+                    <strong>not</strong> have the on finished output, and for these you should delete the &#39;on
+                    finished&#39; output, and assign them as a component on the object that controls them.</li>
+            </ul>
+
+            <h4 id="basic-setup-and-3d-effects-attenuation-">Basic Setup and 3D Effects (Attenuation)</h4>
+
+            <p>There were two main sounds I wanted to add to my grappling-hook project:</p>
+            <ul>
+                <li>A &#39;Grapple Connected&#39; sound - partly to help players know when they&#39;ve missed their
+                    target.</li>
+                <li>A &#39;Rushing Wind&#39; effect that would get louder the faster the player went to give a more
+                    visceral feeling of speed.</li>
+            </ul>
+            <p>The connected sound was very easy - after the connection succeeds in the code, add a single &#39;Play
+                Sound at Location&#39; node and hook in the position of the connection point.</p>
+            <p>The tricky part for this sound was setting up the 3D effect - where the sound is quieter when the
+                connection is further away. In Unity the 3D settings are quite easy to use, with nice graphs and sliders
+                baked into each component, while the hard part would be putting the sound in the right place. In UE this
+                is reversed - putting the sound in the right place requires a single node, while the 3D sound settings
+                require an attenuation asset.</p>
+            <p>The Sound Attenuation asset is used like materials are in unity - requiring an asset which can then be
+                used for multiple sounds. To use them, you first create the asset by right clicking then selecting
+                &#39;sound&#39; then &#39;sound attenuation&#39;. The default settings are good for a typical 3D sound,
+                but things like falloff distance, reverb and occlusion can be edited by double clicking.</p>
+            <p>The attenuation can then be applied to a MetaSound by opening the MetaSound, clicking the
+                &#39;Source&#39; button in the top left, and finding the Attenuation section and picking the asset you
+                made.</p>
+
+            <h4 id="parameters-and-looping">Parameters and Looping</h4>
+            
+            <p>Making the rushing wind effect is more complicated. We need to set the sound up specifically to let it
+                loop, then add an input parameter and use it to adjust the sound, and finally we need to change update
+                the parameter with the players velocity each tick.</p>
+            <p>To set the sound up to loop, first create a MetaSound and delete the &#39;On Finished&#39; output event.
+                Next, add your sound effect with a wave player node and check the &#39;looping&#39; option. To play a
+                looping sound, create an &#39;AudioComponent&#39; variable in your code to keep track of the sound with.
+                You can then either create the sound in code when it needs to start (e.g. &#39;Spawn Sound
+                Attached&#39;) or add a dedicated component, choose the right MetaSound in the details menu and just
+                play it when it needs to start.</p>
+            <p>Next, add the velocity parameter to the MetaSound by opening it and clicking the plus icon next to
+                &#39;inputs&#39; in the top left - then drag the input into the blueprint area. To make it effect the
+                volume, add a Mono Mixer (2) node (designed for combining two sounds, but it will work with just one),
+                then connect the output of your wave player node to &#39;In 0&#39; and the Velocity parameter to the
+                &#39;Gain 0&#39; pin. You may want to add some maths nodes in between to define the effect better (for
+                example clamping the min and max).</p>
+
+            <h4 id="changing-parameters-from-code">Changing Parameters from Code</h4>
+
+            <p>As mentioned earlier, MetaSounds function similarly to Unitys animation system - and this is also true
+                for changing their parameters from code. In this case, choose the &#39;Set Float Parameter&#39; node
+                from the list of set and get functions that exist for each of the many parameter types. Connect it to
+                &#39;Event Tick&#39;, and carefully type (or copy) the name of the Parameter to the &#39;In Name&#39;
+                pin. Finally, add code to get the velocity of the player, and add a &#39;Map Range Clamped&#39; node to
+                normalize the velocity and more finely control the volume.</p>
+            <p>Note: MetaSounds are a beta feature that may still have bugs. When testing parameters in my project they
+                would only update at the start of the sound, then after a long few hours of confusion of frustration
+                they inexplicably started working with the same code and setup.</p>
+
+            <h3 id="conclusion">Conclusion</h3>
+
+            <p>Creating SFX in Unreal Engine was a little frustrating at times, but after getting over the speed-bumps
+                I&#39;m now excited at the possibilities they offer: Wave and noise generation will be super useful for
+                creating simple sounds without searching online, the mixing and live editing tools should make it much
+                easier to create a professional soundscape, and the parameters will make it really easy to add dynamic
+                and interactive sounds (assuming the bugs get fixed).</p>
+
+        </div>
+    </article>
+
+    <footer>
+        <ul id="copyright">
+            <p>&copy; 2026 Jacob Scott. All rights reserved.</p>
+            <p>Design Source: <a href="http://html5up.net">HTML5 UP</a></p>
+        </ul>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
