@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Starting in Unreal</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/tutorials.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Home</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <h1 id="Title">Starting out in Unreal Engine</h1>
+            <h4 class="subtitle">Tips for beginners and Unity veterans</h4>
+            <aside class="date">10/02/2026</aside>
+            <p></p>
+            <p></p>
+            <p>In order to make games in Unreal Engine the first thing you need to understand is how to navigate the different
+                interfaces, menus and special assets. As a seasoned Unity developer this was almost harder than starting
+                fresh - because everything is similar enough to feel like I should understand it, but just different and
+                complicated enough that I couldn&#39;t figure it out without help.</p>
+            <p>This page has the information I wish I had when I was first trying out .</p>
+            
+            <img class="main-img" src="./images/ST01_Thumbnail.png" alt="" />
+
+            <h3 id="levels-and-actors-and-assets">Levels and Actors and Assets</h3>
+            <p>Most of the work developing a game is setting up and programming objects, designing the level, and
+                creating assets. In a modern game engine these are all closely tied together, so figuring out how any
+                one works requires learning about all of them.</p>
+
+            <h4 id="levels">Levels</h4>
+            
+            <img class="main-img" src="./images/ST02_Level.png" alt="" />
+
+            <p>Levels are Unreal Engines version of Scenes, and they function mostly the same as their Unity
+                counterpart: Objects in the level are listed in the outliner, objects can be selected to see details,
+                and there is a play button at the top to test the currently active level. One small but noticeable
+                difference is that you cannot disable objects or components with the UI in Unreal Engine, which can make
+                testing a little trickier. Another difference is that in Unity it would be common to make smaller
+                sections of a scene into prefabs to be loaded in, but in UnrealEngine making another level and loading
+                it into the main level is the more common approach (but both engines do support either option).</p>
+            <p>Another feature I love in Unity that Unreal Engine doesn&#39;t support is having a scene view and a game
+                view at the same time. This makes debugging collisions, object generation and many other things much
+                easier, as you can point the camera wherever it needs to be without changing the game at all. The
+                closest I can find in UE is pressing F8 to enter free-camera mode, but unfortunately you can&#39;t
+                control your character while doing this.</p>
+
+            <h4 id="actors">Actors</h4>
+            
+            <img class="main-img" src="./images/ST03_Components.png" alt="" />
+
+            <p>Objects or &#39;Actors&#39; in Unreal Engine are much more different to Unity than the Levels are. Unity
+                has a very simple system: Every single effect in the game - the mesh, renderer, collider, controller and
+                more - is created by a component that is attached to a GameObject. GameObjects have names and positions,
+                and can be children of other GameObjects, but are otherwise just foundations for the components to be
+                built on.</p>
+
+            <p>Actors in Unreal Engine however are more cohesive - each actor is a self contained object that usually
+                serves a single function on its own, and any additional functions are performed by &#39;components&#39;.
+                Components in Unreal Engine do the same job as components in Unity, but it&#39;s hard to notice this
+                because on the surface they look a lot more like child objects: They have their own transform and name,
+                can be nested children of other components in the main Actor, and at first glance the different sections
+                of properties look like Unity components as well.</p>
+            
+            <img class="main-img" src="./images/ST04_DirectionalLight.png" alt="" />
+
+            <p>The main confusion comes from Actors and Components being so similar. You could add a &#39;Directional
+                Light&#39; component to an existing Actor, or you could add a &#39;Directional Light&#39; Actor into
+                your scene. These look like they&#39;re basically the same thing, but the Directional Light Actor is
+                actually a special object that has a Directional Light component baked into it, but can also have other
+                components added if needed.</p>
+
+            <h4 id="unity-unreal-actor-comparison">Unity/Unreal Actor Comparison</h4>
+
+            <p>At a fundamental level these two engines are actually organised in a very similar way, but the options
+                you have to interact with the different pieces - as well as the way they are presented - makes them feel
+                very different:</p>
+            <p><strong>In Unity</strong> parts of your game are <strong>Scenes</strong>, which contain a list of
+                <strong>GameObjects</strong> that can be ordered and parented to each other.
+                <strong>GameObjects</strong> have a name and a position, and a list of <strong>Components</strong> with
+                no positions or names that perform the functions of the object.
+                GameObjects are all the same besides their components, and &#39;objects&#39; like players or enemies are
+                often made of multiple GameObjects which each hold components for different parts of their behavior.
+                E.g. an enemy might have a &#39;head&#39; child GameObject to handle critical hits.</p>
+            <p><strong>In Unreal Engine</strong> parts of your game are <strong>Levels</strong>, which have a list of
+                <strong>Actors</strong> that can be attached to each other. There are many types of
+                <strong>Actors</strong> which have different built-in components or functionality, but can all have
+                <strong>Components</strong>, which have their own position and perform additional functions for the
+                Actor.
+                Actors are often fundamentally different to each other, and each independent &#39;object&#39; in a game
+                should be a single Actor with components to handle the different parts of their behavior. E.g. an enemy
+                could have a collision component called &#39;head&#39; that handles critical hits.</p>
+
+            <h4 id="player-character">Player Character</h4>
+
+            <p>When loading either the First of Third Person Template to start a new project, you may find it difficult
+                to figure out how your player character gets into the level - how does the Level know what object to
+                spawn, and how do you change it or edit the character? The only clue is the &#39;Player Start&#39;
+                object that can be used to control where the player spawns - but it hasn&#39;t got a reference to a
+                player. It doesn&#39;t get much clearer when we start the game either - nine different player-related
+                actors appear with no clues about how they got there. </p>
+            <p>The way Unreal Engine handles players and controllers makes some games - like multiplayer shooters - much
+                much easier to set up, and is in general very robust and flexible, but like many things in UE comes with
+                a lot of complexity in order to support those goals.</p>
+            
+            <img class="main-img" src="./images/ST05_CharacterBlueprints.png" alt="" />
+
+            <p>To simplify, the controllers and characters that are spawned in the level are determined by a
+                &#39;GameMode&#39; asset that can be assigned in the project settings. The default GameMode asset and
+                the character it references are stored under Content, FirstPerson (or ThirdPerson), then Blueprints. If
+                you want to make changes to how your player works, just edit the BP_FirstPersonCharacter or
+                BP_ThirdPersonCharacter found in the same folder.</p>
+            
+            <img class="main-img" src="./images/ST06_GameMode.png" alt="" />
+
+            <h4 id="conclusion">Conclusion</h4>
+
+            <p>The way Unreal Engine handles Levels and Actors is a little more complicated than Unity, but not really
+                worse or better - just different.</p>
+
+        </div>
+    </article>
+
+    <footer>
+        <ul id="copyright">
+            <p>&copy; 2026 Jacob Scott. All rights reserved.</p>
+            <p>Design Source: <a href="http://html5up.net">HTML5 UP</a></p>
+        </ul>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
