@@ -1,0 +1,57 @@
+/*CSS source: https://www.w3schools.com/howto/howto_js_image_comparison.asp*/
+
+* {box-sizing: border-box;}
+
+:root {
+  --img-width: 500px;
+  --img-height: 320px;
+}
+
+.img-comp-container {
+  position: relative;
+  height: var(--img-height);
+  
+  text-align: center;
+  justify-content: center;
+}
+
+.img-comp-container {
+    width: var(--img-width);
+    margin-left: calc((750px - var(--img-width)) / 2);
+}
+@media screen and (max-width: 736px) {
+	.img-comp-container {
+    width: var(--img-width);
+		margin-left: calc((100% - var(--img-width)) / 2);
+	}
+}
+
+.img-comp-img {
+  position: absolute;
+  width: auto;
+  height: auto;
+  overflow:hidden;
+}
+
+.img-comp-img img {
+  display:block;
+  vertical-align:middle;
+  align-content: center;
+}
+
+.sliding-img {
+  width: var(--img-width);
+  height: var(--img-height);
+}
+
+.img-comp-slider {
+  position: absolute;
+  z-index:9;
+  cursor: ew-resize;
+  /*set the appearance of the slider:*/
+  width: 40px;
+  height: 40px;
+  background-color: #2196F3;
+  opacity: 0.7;
+  border-radius: 50%;
+}

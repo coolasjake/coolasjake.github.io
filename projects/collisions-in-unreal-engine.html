@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Collisions in Unreal</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/tutorials.css" />
+    <link rel="stylesheet" href="../assets/css/comparison-image.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+    <script src="../assets/js/comparison-image.js"></script>
+
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body class="is-preload">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="container">
+            <li><a href="../index.html#introduction">Home</a></li>
+            <li><a href="../index.html#skills">My Skills</a></li>
+            <li><a href="../index.html#my-projects">My Projects</a></li>
+        </ul>
+    </nav>
+
+    <article class="wrapper style1">
+        <div class="container">
+            <h1 id="collisions-in-unreal-engine">Collisions in Unreal Engine</h1>
+            <h4 class="subtitle">How to set up collision meshes for static objects</h4>
+            <aside class="date">18/02/2026</aside>
+            <p></p>
+            <p></p>
+            <p>Learn the basics of adding collisions to static mesh objects in Unreal Engine, including primitives,
+                auto convex hulls and custom imported geometry.</p>
+
+            <img class="main-img" src="./images/COL01_Thumbnail.png" alt="" />
+
+            <h3 id="mesh-types">Mesh Types</h3>
+            <p>To start editing the collisions of a static mesh component press &#39;ctrl+E&#39;. This will open the
+                editing window, which for static mesh actors is mainly useful for editing collision and rendering
+                options like materials and LOD. Changes here apply to all copies of the object.</p>
+            <p>From this window we can edit how the collisions work on our object. There are two main options for
+                meshes: complex, which uses the render mesh of the object, and simple, which uses custom geometry for
+                the collisions. Complex is not recommended in most cases since it uses a lot more performance than
+                simple, but it is a good option for prototypes.</p>
+            <p>Objects can use both types of collision, and there are settings for which type is used for different
+                interactions. Make sure collision complexity is set to the type you&#39;re using if your collisions
+                aren&#39;t working.</p>
+
+            <img class="resize-img" width="60%" src="./images/COL02_CollisionOptions.png" alt="" />
+
+            <p>Simple collisions are made using three different options: primitive shapes (cubes, spheres and capsules),
+                auto convex meshes, or imported simplified meshes. Primitive and Auto Convex colliders can be added from
+                the &#39;Collision&#39; dropdown at the top of the window. You can edit the position, rotation and scale
+                of each primitive individually (no matter which type) using tools in the viewing window, as well as
+                duplicate and delete them. Tip: Any simple colliders that are added to the object will appear in a list
+                in the &#39;primitives&#39; section.</p>
+
+            <p>List of options:</p>
+            <ul>
+                <li>Complex</li>
+                <li>Simple
+                    <ul>
+                        <li>Primitive</li>
+                        <li>Auto Convex</li>
+                        <li>Imported</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <img class="small-img" src="./images/COL03_PrimitiveColliders.png" alt="" />
+            <img class="small-img" src="./images/COL04_AutoConvexRendered.png" alt="" />
+            <img class="small-img" src="./images/COL05_AutoConvexColliders.png" alt="" />
+            <aside>Primitive colliders, Auto Convex, and collision view of Auto Convex.</aside>
+
+
+
+            <h4 id="convex-vs-concave-colliders">Convex vs Concave Colliders</h4>
+            <p>When checking for collisions in a game engine the difference in complexity between convex and concave
+                colliders is huge. In this context Concave is the opposite of Convex, which in this context means a
+                shape that has no indents or &#39;caves&#39;, or more technically, has no cross-sections that are
+                smaller in the middle than they are near the edges.</p>
+
+            <img class="resize-img" width="70%" src="./images/COL11_ConvexLineDiagram.png" alt="" />
+
+            <p>The reason convex colliders are much better is because if you know that a point is in between two
+                surfaces of the shape, you know that it is definitely within the bound of the shape (in that axis). This
+                means you can check if a collision has occurred using simple greater or less than calculations. With a concave
+                shape you cannot use this technique, as a point between two surfaces could either be colliding or be in an
+                indent. Collision algorithms for concave shapes are incredibly clever and
+                well optimized, but are still magnitudes more time consuming than ones for convex shapes, so making
+                as many shapes convex as possible (even if that means using multiple colliders per object) can make huge
+                differences to performance.</p>
+            <p>Primitive shapes are special convex shapes that are even more efficient because collisions with them can
+                be checked for using maths instead of comparing meshes - for example a sphere collider just needs to
+                check if a point is less than the length of the radius away from the center. This means using multiple
+                primitive shapes is often faster than a single non-primitive shape.</p>
+            <p>Note: make sure you create primitives within the engine - an incorrectly imported sphere will be treated
+                as
+                a mesh and therefore not use the efficient collision methods.</p>
+
+            <h4 id="auto-convex-collisions">Auto Convex Collisions</h4>
+            <p>The auto convex collider generator is an option in Unreal to quickly make convex colliders around your
+                object. It creates multiple smaller &#39;hulls&#39; to fill different parts of the object, which has the
+                benefit of being able to create concave shapes while still using simple collisions for performance. </p>
+
+            <img class="main-img" src="./images/COL06_AutoConvexSettings.png" alt="" />
+
+            <p>After choosing the Auto Convex option a tab with three options and an &#39;apply&#39; button will appear:
+            </p>
+            <ul>
+                <li><strong>Hull Count</strong> - this is the number of simple colliders the generator can make. Some
+                    shapes will need more or less hulls, for example a simple tree could have quite accurate collisions
+                    with one hull for the trunk and one for the branches, but a bucket would need at least five hulls
+                    (bottom and four sides) to even start matching the correct collisions.</li>
+                <li><strong>Max Hull Verts</strong> - the maximum number of vertices the hulls can have. In the tree vs
+                    bucket example, the tree would need a high number of vertices to be accurate since the leaves and
+                    trunk are both rounded. The bucket on the other hand wouldn&#39;t benefit much from more vertices,
+                    since the hulls couldn&#39;t match the inside curve of the bucket without becoming concave.</li>
+                <li><strong>Hull Precision</strong> - this lets you decide if the calculation should be done quickly with lower accuracy,
+                    or slowly with higher accuracy. For most of the objects I&#39;ve tested the maximum precision value
+                    takes about a minute, so I tend to try low precision first, then put it much higher if it wasn&#39;t
+                    right the first time. The precision value seems make the colliders match the size of the object
+                    better, but didn&#39;t seem to improve some of the big problems I had trying to use the system.</li>
+            </ul>
+            <p>The main problem I found is that even on high settings (precision, hulls and vertices) the generator
+                often leaves gaps between hulls create holes into or even through the object. This is especially bad for
+                large terrain pieces, as the player can fall into these holes and get stuck. The documentation implies
+                that there are technical reasons for collision meshes not overlapping each other, but I couldn&#39;t
+                find exactly what the consequences were to decide if they are worth avoiding.</p>
+
+            <div class="img-comp-container">
+                <div class="img-comp-img">
+                    <img class="sliding-img" src="./images/COL09_BoulderRendered.png">
+                </div>
+                <div class="img-comp-img img-comp-overlay">
+                    <img class="sliding-img" src="./images/COL10_BoulderCollider.png">
+                </div>
+            </div>
+            <aside>An Auto Convex collider with two hulls.</aside>
+            <aside>Click and slide to see the gap in the collider</aside>
+            <script>
+                /*Execute a function that will execute an image compare function for each element with the img-comp-overlay class:*/
+                initComparisons();
+            </script>
+
+            <p><strong>Unity Comparison:</strong>
+                In Unity there is an option to use a convex version of the collider, which simply expands the mesh to
+                cover any indents. This is great for objects that are already mostly convex like rocks and walls, but
+                bad for objects that need to be concave to function, such as a bucket or a doorway.</p>
+            <p>Having a flexible system for generating colliders in Unreal Engine is nice, but I think Unity&#39;s
+                solution is a better one - the simplicity makes it easier to decide if a different solution is needed or
+                not, and more collisions than expected (e.g. colliders that are slightly larger or have less corners
+                than the real geometry) are much less noticeable than a lack of collisions, since clipping inside a mesh
+                immediately breaks a players immersion.</p>
+            <h4 id="importing-meshes">Importing Meshes</h4>
+            <p>The most reliable way to set up colliders in Unreal is to import custom meshes for them. The system to do
+                this is opaque, but good once you&#39;ve learnt it. To start you need a 3D model file, preferably in FBX
+                format. If you want to use meshes from packages or FAB, you can either open the object and find the
+                location of the FBX file under &#39;import settings &gt;&gt; file path&#39;, or you can create a copy of
+                the FBX by finding the object in the content browser, right clicking and choosing &#39;asset actions
+                &gt;&gt; export&#39;.</p>
+            <p>Once you have the FBX open, you need to make a convex mesh for the object to use. Unreal Engine can
+                import multiple meshes, and they can either be primitives (sphere, cube or capsule), or custom convex
+                meshes. Your 3D modelling software should have options to simplify a mesh, and to make it convex. For
+                example in Blender you can make a mesh convex by going into edit mode, then selecting the mesh by
+                pressing &#39;A&#39; then selecting &#39;Mesh &gt;&gt; Convex Hull&#39;.</p>
+
+            <img class="main-img" src="./images/COL07_ConvexOriginalCustom.png" alt="" />
+            <p>In order to import custom colliders each collider object needs to have a specific name based on what type it is - and
+                which object in the file it should be assigned to. The hierarchy or parenting of the objects is not important when
+                importing, but primitives must not be warped or deformed. If the names of the objects are set up correctly you
+                should be able to import the new FBX using the default settings. Unreal Engine will also detect changes to FBXs and
+                pop up an option to automatically update them.</p>
+            <p><strong>Naming rules:</strong></p>
+            <ul>
+                <li>Box = <code>UBX_(RenderMeshName)_##</code></li>
+                <li>Capsule = <code>UCP_(RenderMeshName)_##</code></li>
+                <li>Sphere = <code>USP_(RenderMeshName)_##</code></li>
+                <li>Convex = <code>UCX_(RenderMeshName)_##</code></li>
+            </ul>
+
+            <img class="main-img" src="./images/COL08_ImportedColliders.png" alt="" />
+
+            <p><strong>Example:</strong>
+                If you want to put a custom Convex collider on an object called &#39;Car_Body&#39;, you need to call the
+                collider mesh &#39;UCX_Car_Body_00&#39;. If you want to also assign a box collider to the body, you need
+                to call the box mesh &#39;UBX_Car_Body_01&#39;.</p>
+            <p>More details can be found in the UE documentation <a
+                    href="https://dev.epicgames.com/documentation/en-us/unreal-engine/fbx-static-mesh-pipeline-in-unreal-engine#collision">here</a>.
+            </p>
+
+
+        </div>
+    </article>
+
+    <footer>
+        <ul id="copyright">
+            <p>&copy; 2026 Jacob Scott. All rights reserved.</p>
+            <p>Design Source: <a href="http://html5up.net">HTML5 UP</a></p>
+        </ul>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

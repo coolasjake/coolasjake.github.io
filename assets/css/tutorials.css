@@ -44,9 +44,19 @@ p, code {
 	margin-bottom: 5px;
 }
 
-.main-img {
+.main-img, .small-img, .resize-img {
 	margin: 20px 0 5px 0;
+}
+
+.main-img {
 	width: 100%;
+}
+
+.resize-img {
+}
+
+.small-img {
+	width: 30%;
 }
 
 .subtitle {
